@@ -1,0 +1,89 @@
+.button {
+  --btn-bg: var(--color-primary);
+  --btn-fg: #fff;
+  --btn-border: transparent;
+  --btn-bg-hover: var(--color-primary-hover);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 50px;
+  padding: 0 24px;
+  border: 1px solid var(--btn-border);
+  border-radius: var(--radius-pill);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+  transition:
+    background-color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    transform var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+}
+
+.button:hover:not(:disabled) {
+  background: var(--btn-bg-hover);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.button:focus-visible {
+  outline-offset: 3px;
+  border-radius: var(--radius-pill);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.button[aria-busy='true'] {
+  cursor: progress;
+  opacity: 0.85;
+}
+
+.lg {
+  min-height: 52px;
+}
+
+.block {
+  display: flex;
+  width: 100%;
+}
+
+.primary {
+  /* defaults */
+}
+
+.secondary {
+  --btn-bg: var(--color-surface);
+  --btn-fg: var(--color-primary);
+  --btn-border: var(--color-border);
+  --btn-bg-hover: var(--color-soft-green-2);
+}
+
+.accent {
+  --btn-bg: var(--color-apricot);
+  --btn-fg: var(--color-ink);
+  --btn-bg-hover: var(--color-apricot-hover);
+}
+
+.link {
+  --btn-bg: transparent;
+  --btn-fg: var(--color-primary);
+  --btn-bg-hover: transparent;
+  min-height: 0;
+  padding: 4px 0;
+}
+
+.link:hover:not(:disabled) span {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}

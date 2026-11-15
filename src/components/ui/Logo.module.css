@@ -1,0 +1,32 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-ink);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.mark {
+  color: var(--color-primary);
+  flex: none;
+}
+
+.lg .word {
+  font-size: 27px;
+}
+
+.md .word {
+  font-size: 25px;
+}
+
+@media (max-width: 600px) {
+  .lg .word {
+    font-size: 23px;
+  }
+  .lg .mark {
+    width: 32px;
+    height: 28px;
+  }
+}

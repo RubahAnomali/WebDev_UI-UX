@@ -1,0 +1,56 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 104px;
+  padding: 20px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  transition:
+    background-color var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
+}
+
+.green {
+  background: var(--color-soft-green-2);
+}
+
+.sand {
+  background: var(--color-sand);
+}
+
+.card:hover {
+  border-color: #cfd8c9;
+  background: var(--color-soft-green-2);
+  transform: translateY(-2px);
+}
+
+.card:focus-visible {
+  border-radius: var(--radius-md);
+}
+
+.emblem {
+  flex: none;
+  width: 56px;
+  height: 56px;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 27px;
+  color: var(--color-ink);
+}
+
+.tagline {
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--color-muted);
+}

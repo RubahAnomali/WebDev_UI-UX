@@ -1,0 +1,143 @@
+.header {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(32px, 3vw, 42px);
+  line-height: 1.19;
+  color: var(--color-ink);
+  letter-spacing: -0.005em;
+}
+
+.title:focus-visible {
+  outline: none;
+}
+
+.subtitle {
+  margin-top: 14px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--color-muted);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.alert {
+  margin-bottom: 24px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: -4px;
+}
+
+.inlineLink {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+  padding: 4px 0;
+}
+
+.inlineLink:hover,
+.switch a:hover,
+.backLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.submit {
+  margin-top: 12px;
+}
+
+.switch {
+  margin-top: 28px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: var(--color-primary);
+}
+
+.switch a {
+  margin-left: 6px;
+  font-weight: 600;
+}
+
+.legal {
+  margin-top: 72px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+
+.legal a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 28px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.note {
+  margin-top: 40px;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--color-muted);
+}
+
+.emblem {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 36px;
+}
+
+.emailStrong {
+  display: block;
+  margin-top: 6px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 26px;
+  color: var(--color-ink);
+  word-break: break-all;
+}
+
+.body {
+  margin-top: 28px;
+  font-size: 15px;
+  line-height: 23px;
+  color: var(--color-muted);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 40px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0;
+  color: var(--color-primary);
+}

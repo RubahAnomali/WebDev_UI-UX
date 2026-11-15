@@ -1,0 +1,139 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 640fr) minmax(0, 800fr);
+  min-height: 100vh;
+  min-height: 100dvh;
+  /* Keep the brand colour running the full height on long forms. */
+  background: linear-gradient(to right, var(--color-soft-green) 0 calc(640 / 1440 * 100%), var(--color-bg) 0);
+}
+
+.brand {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 640px;
+  padding: 43px 60px 48px 54px;
+  background: var(--color-soft-green);
+}
+
+.headline {
+  margin-top: clamp(48px, 9vh, 92px);
+  font-family: var(--font-serif);
+  font-size: clamp(40px, 3.9vw, 55px);
+  line-height: 1.18;
+  color: var(--color-ink);
+  padding-left: 6px;
+}
+
+.art {
+  align-self: center;
+  width: clamp(150px, 17vw, 248px);
+  height: auto;
+  margin: auto 0;
+}
+
+.copy {
+  padding-left: 6px;
+}
+
+.lead {
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 28px;
+  color: var(--color-ink);
+}
+
+.sub {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 23px;
+  color: var(--color-muted);
+}
+
+.motto {
+  margin-top: 48px;
+  padding-left: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  padding: 41px var(--gutter) 64px;
+}
+
+.main:focus-visible {
+  outline: none;
+}
+
+.panel {
+  width: 100%;
+  max-width: 488px;
+  margin-left: clamp(0px, 5.5vw, 152px);
+  margin-right: auto;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.mobileLogo {
+  display: none;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.back:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 1100px) {
+  .brand {
+    padding-inline: 40px;
+  }
+  .panel {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    background: var(--color-bg);
+  }
+  .brand {
+    display: none;
+  }
+  .main {
+    padding-top: 20px;
+  }
+  .panel {
+    margin-inline: auto;
+  }
+  .mobileLogo {
+    display: block;
+  }
+  .topRow {
+    margin-bottom: 32px;
+  }
+}

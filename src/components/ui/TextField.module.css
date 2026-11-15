@@ -1,0 +1,101 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--color-ink);
+}
+
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 54px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  transition:
+    border-color var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+}
+
+.control:hover {
+  border-color: #c9d2c4;
+}
+
+.control:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(36, 90, 70, 0.16);
+}
+
+.invalid,
+.invalid:hover {
+  border-color: var(--color-error);
+}
+
+.invalid:focus-within {
+  box-shadow: 0 0 0 3px rgba(166, 61, 50, 0.16);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.input::placeholder {
+  color: var(--color-muted);
+  opacity: 1;
+}
+
+.input:focus-visible {
+  outline: none;
+}
+
+.hasTrailing .input {
+  padding-right: 52px;
+}
+
+.trailing {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+}
+
+.hint {
+  margin-top: -2px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: -2px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+  color: var(--color-error);
+}
+
+.error svg {
+  flex: none;
+  margin-top: 1px;
+}
