@@ -18,7 +18,14 @@ export const ROUTES = {
   privacy: '/privacy',
   terms: '/terms',
   accessibility: '/accessibility',
+  saved: '/saved',
+  messages: '/messages',
+  requests: '/requests',
+  account: '/account',
+  admin: '/admin',
 } as const;
+
+export const petPath = (id: string) => `/pets/${id}`;
 
 /**
  * Destinations that belong to later phases. They render an honest
@@ -45,4 +52,13 @@ export const UPCOMING_PAGES: Record<string, { title: string; summary: string }> 
   [ROUTES.privacy]: { title: 'Privacy policy', summary: 'How Pawhaven collects, uses, and protects your data.' },
   [ROUTES.terms]: { title: 'Terms of use', summary: 'The rules that keep Pawhaven safe for pets and people.' },
   [ROUTES.accessibility]: { title: 'Accessibility', summary: 'Our commitment to an accessible Pawhaven.' },
+};
+
+/** Signed-in destinations still being built; guarded so they require an account. */
+export const UPCOMING_PRIVATE_PAGES: Record<string, { title: string; summary: string; role?: 'admin' }> = {
+  [ROUTES.saved]: { title: 'Saved pets', summary: 'Your saved companions, all in one place.' },
+  [ROUTES.messages]: { title: 'Messages', summary: 'Questions, updates, and meet-and-greet plans in one safe place.' },
+  [ROUTES.requests]: { title: 'My adoption requests', summary: 'Track every adoption request you’ve sent.' },
+  [ROUTES.account]: { title: 'Account & privacy', summary: 'Keep your profile current and choose what you share.' },
+  [ROUTES.admin]: { title: 'Moderation workspace', summary: 'Care behind every connection.', role: 'admin' },
 };

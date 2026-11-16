@@ -5,15 +5,19 @@ import { RegisterPage } from './features/auth/RegisterPage';
 import { ResetPasswordPage } from './features/auth/ResetPasswordPage';
 import { VerifyEmailPage } from './features/auth/VerifyEmailPage';
 import { HomePage } from './features/home/HomePage';
-import { ROUTES, UPCOMING_PAGES } from './lib/routes';
+import { RequireAuth } from './components/layout/RequireAuth';
+import { ROUTES, UPCOMING_PAGES, UPCOMING_PRIVATE_PAGES } from './lib/routes';
 import { ScrollManager } from './lib/ScrollManager';
+import { SessionWatcher } from './lib/SessionWatcher';
 import { ComingSoon } from './pages/ComingSoon';
+import { NotAllowed } from './pages/NotAllowed';
 import { NotFound } from './pages/NotFound';
 
 export function App() {
   return (
     <>
       <ScrollManager />
+      <SessionWatcher />
       <Routes>
         <Route path={ROUTES.home} element={<HomePage />} />
         <Route path={ROUTES.login} element={<LoginPage />} />
@@ -31,6 +35,18 @@ export function App() {
           element={<ComingSoon title="Pet profile" summary="Full profiles with health, care needs, and how to apply." />}
         />
 
+        {Object.entries(UPCOMING_PRIVATE_PAGES).map(([path, page]) => (
+          <Route
+            key={path}
+            path={path}
+            element={
+              <RequireAuth role={page.role}>
+                <ComingSoon />
+              </RequireAuth>
+            }
+          />
+        ))}
+        <Route path="/not-allowed" element={<NotAllowed />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

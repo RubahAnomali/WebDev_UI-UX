@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { PageShell } from '../components/layout/PageShell';
 import { Button } from '../components/ui/Button';
 import { Icon } from '../components/ui/Icon';
-import { ROUTES, UPCOMING_PAGES } from '../lib/routes';
+import { ROUTES, UPCOMING_PAGES, UPCOMING_PRIVATE_PAGES } from '../lib/routes';
 import { useDocumentTitle } from '../lib/useDocumentTitle';
 import styles from './StatusPage.module.css';
 
@@ -12,7 +12,7 @@ import styles from './StatusPage.module.css';
  */
 export function ComingSoon({ title: titleOverride, summary: summaryOverride }: { title?: string; summary?: string }) {
   const { pathname } = useLocation();
-  const page = UPCOMING_PAGES[pathname];
+  const page = UPCOMING_PAGES[pathname] ?? UPCOMING_PRIVATE_PAGES[pathname];
   const title = titleOverride ?? page?.title ?? 'Coming soon';
   const summary = summaryOverride ?? page?.summary;
   useDocumentTitle(title);

@@ -1,0 +1,39 @@
+.footer {
+  margin-top: 64px;
+}
+
+.inner {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 24px;
+  padding-top: 21px;
+  padding-bottom: 28px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--color-muted);
+}
+
+.inner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--gutter);
+  right: var(--gutter);
+  height: 1px;
+  background: var(--color-border);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+}
+
+.links a:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

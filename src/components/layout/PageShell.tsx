@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
+import { CompactFooter } from './CompactFooter';
 import { SiteFooter } from './SiteFooter';
 import { SiteHeader } from './SiteHeader';
 
-export function PageShell({ children }: { children: ReactNode }) {
+export function PageShell({ children, footer = 'full' }: { children: ReactNode; footer?: 'full' | 'compact' }) {
   return (
     <>
       <a href="#main" className="skip-link">
@@ -12,7 +13,7 @@ export function PageShell({ children }: { children: ReactNode }) {
       <main id="main" tabIndex={-1}>
         {children}
       </main>
-      <SiteFooter />
+      {footer === 'full' ? <SiteFooter /> : <CompactFooter />}
     </>
   );
 }

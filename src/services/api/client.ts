@@ -44,7 +44,9 @@ async function csrfToken(): Promise<string> {
 const unauthorizedListeners = new Set<() => void>();
 export function onUnauthorized(fn: () => void) {
   unauthorizedListeners.add(fn);
-  return () => unauthorizedListeners.delete(fn);
+  return () => {
+    unauthorizedListeners.delete(fn);
+  };
 }
 
 type Method = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';

@@ -12,6 +12,7 @@ import type { DB } from './db/database.ts';
 import { ApiError } from './lib/errors.ts';
 import { createMailer, type Mailer } from './lib/mailer.ts';
 import { authRoutes } from './routes/auth.ts';
+import { meRoutes } from './routes/me.ts';
 import { systemRoutes } from './routes/system.ts';
 
 export interface AppDeps {
@@ -77,6 +78,7 @@ export async function buildApp({ db, mailer = createMailer(db), logger = !config
   const deps = { db, mailer };
   systemRoutes(app, deps);
   authRoutes(app, deps);
+  meRoutes(app, deps);
 
   // Uploaded photos (already re-encoded and EXIF-stripped on upload).
   if (!existsSync(config.uploadDir)) mkdirSync(config.uploadDir, { recursive: true });

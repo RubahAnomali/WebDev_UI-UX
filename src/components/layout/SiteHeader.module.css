@@ -38,7 +38,10 @@
 }
 
 .navLink {
-  display: inline-block;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 8px 14px;
   border-radius: var(--radius-pill);
   font-size: 15px;
@@ -51,7 +54,7 @@
   background: var(--color-soft-green-2);
 }
 
-.navList li:first-child .navLink,
+.desktopNav:not(.signedIn) .navList li:first-child .navLink,
 .active {
   font-weight: 600;
   color: var(--color-primary);
@@ -163,5 +166,64 @@
 @media (min-width: 901px) {
   .mobilePanel {
     display: none !important;
+  }
+}
+
+.signedIn {
+  padding-left: clamp(8px, 6vw, 96px);
+}
+
+.signedIn .navList {
+  gap: 4px;
+}
+
+.badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-apricot);
+  color: var(--color-ink);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.menuToggle {
+  position: relative;
+}
+
+.dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-apricot);
+  box-shadow: 0 0 0 2px var(--color-surface);
+}
+
+.mobileWho {
+  padding: 8px 4px 4px;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.mobileLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (max-width: 1240px) {
+  .signedIn {
+    padding-left: 8px;
+    justify-content: center;
+  }
+  .signedIn .navLink {
+    padding-inline: 8px;
   }
 }
