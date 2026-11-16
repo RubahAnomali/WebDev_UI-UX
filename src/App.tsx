@@ -1,4 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
+import { AccountPage } from './features/account/AccountPage';
+import { ConfirmEmailPage } from './features/account/ConfirmEmailPage';
 import { ForgotPasswordPage } from './features/auth/ForgotPasswordPage';
 import { LoginPage } from './features/auth/LoginPage';
 import { RegisterPage } from './features/auth/RegisterPage';
@@ -132,6 +134,15 @@ export function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path={ROUTES.account}
+          element={
+            <RequireAuth>
+              <AccountPage />
+            </RequireAuth>
+          }
+        />
+        <Route path="/confirm-email" element={<ConfirmEmailPage />} />
         <Route
           path={ROUTES.saved}
           element={

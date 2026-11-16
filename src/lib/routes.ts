@@ -55,6 +55,5 @@ export const UPCOMING_PAGES: Record<string, { title: string; summary: string }> 
 
 /** Signed-in destinations still being built; guarded so they require an account. */
 export const UPCOMING_PRIVATE_PAGES: Record<string, { title: string; summary: string; role?: 'admin' }> = {
-  [ROUTES.account]: { title: 'Account & privacy', summary: 'Keep your profile current and choose what you share.' },
   [ROUTES.admin]: { title: 'Moderation workspace', summary: 'Care behind every connection.', role: 'admin' },
 };
