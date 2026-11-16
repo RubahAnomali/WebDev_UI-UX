@@ -82,7 +82,9 @@ export function LoginPage() {
       setFormError(
         err instanceof AuthError && err.code === 'INVALID_CREDENTIALS'
           ? 'The email or password is incorrect. Check your details or reset your password.'
-          : 'We couldn’t reach Pawhaven just now. Check your connection and try again.',
+          : err instanceof AuthError && (err.code === 'ACCOUNT_SUSPENDED' || err.code === 'RATE_LIMITED')
+            ? err.message
+            : 'We couldn’t reach Pawhaven just now. Check your connection and try again.',
       );
       setValues((v) => ({ ...v, password: '' }));
       document.getElementById('login-password')?.focus();

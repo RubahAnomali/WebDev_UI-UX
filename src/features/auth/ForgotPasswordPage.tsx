@@ -9,7 +9,7 @@ import { TextField } from '../../components/ui/TextField';
 import { ROUTES } from '../../lib/routes';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
 import { useAuth } from '../../services/auth/AuthContext';
-import { DemoOutbox } from './DemoOutbox';
+import { DevMailbox } from './DevMailbox';
 import { useFocusHeading } from './useFocusHeading';
 import { validateEmail } from './validation';
 import styles from './AuthPage.module.css';
@@ -68,7 +68,7 @@ export function ForgotPasswordPage() {
             Use a different email
           </Button>
         </div>
-        <DemoOutbox email={sentTo} match="reset" />
+        <DevMailbox email={sentTo} match="reset" />
       </AuthLayout>
     );
   }

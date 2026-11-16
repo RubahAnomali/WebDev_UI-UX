@@ -1,10 +1,10 @@
-import { createDemoAuthAdapter } from './demoAuthAdapter';
+import { createHttpAuthAdapter } from './httpAuthAdapter';
 import type { AuthService } from './types';
 
 /**
  * The single place that chooses the AuthService implementation.
- * Swap `createDemoAuthAdapter()` for an HTTP adapter once the API exists.
+ * The in-browser demo adapter (`demoAuthAdapter.ts`) is used only by unit tests.
  */
-export const authService: AuthService = createDemoAuthAdapter();
+export const authService: AuthService = createHttpAuthAdapter();
 
 export * from './types';

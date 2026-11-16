@@ -11,21 +11,11 @@
  * - `admin` is never available through registration and is only assigned
  *   server-side. The client never decides authorization — it only hides UI.
  */
-export type AccountType = 'individual' | 'organization';
-export type Role = 'member' | 'seller' | 'admin';
-export type OrganizationVerification = 'not_applicable' | 'pending' | 'verified' | 'rejected';
+import type { ApiUser } from '../../../shared/types';
+export type { AccountType, OrganizationVerification, Role } from '../../../shared/constants';
+import type { AccountType } from '../../../shared/constants';
 
-export interface User {
-  id: string;
-  fullName: string;
-  email: string;
-  location: string;
-  accountType: AccountType;
-  roles: Role[];
-  emailVerified: boolean;
-  organizationVerification: OrganizationVerification;
-  createdAt: string;
-}
+export type User = ApiUser;
 
 export interface RegisterInput {
   fullName: string;
@@ -34,6 +24,8 @@ export interface RegisterInput {
   location: string;
   accountType: AccountType;
   acceptedTerms: boolean;
+  /** Shelter / rescue name (organization accounts only). */
+  organizationName?: string;
 }
 
 export interface LoginInput {
@@ -49,24 +41,45 @@ export type AuthErrorCode =
   | 'TOKEN_EXPIRED'
   | 'RATE_LIMITED'
   | 'VALIDATION'
+  | 'ACCOUNT_SUSPENDED'
   | 'NETWORK';
 
 export class AuthError extends Error {
   readonly code: AuthErrorCode;
   /** Seconds until the action can be retried (RATE_LIMITED). */
   readonly retryAfter?: number;
+  /** Server-side field errors (VALIDATION). */
+  readonly fields?: Record<string, string>;
 
-  constructor(code: AuthErrorCode, message: string, retryAfter?: number) {
+  constructor(code: AuthErrorCode, message: string, retryAfter?: number, fields?: Record<string, string>) {
     super(message);
     this.name = 'AuthError';
     this.code = code;
     this.retryAfter = retryAfter;
+    this.fields = fields;
   }
+}
+
+/** A simulated email, shown in the development mailbox. */
+export interface DevEmail {
+  id: string;
+  to: string;
+  subject: string;
+  body: string;
+  link?: string | null;
+  createdAt: string | number;
 }
 
 export interface AuthService {
   /** True for the in-browser demo implementation. Drives the demo banner. */
   readonly isDemo: boolean;
+  /**
+   * Development only: returns simulated emails for an address, or null when
+   * real emails are being sent (the mailbox UI is then hidden).
+   */
+  getDevMailbox(email: string): Promise<DevEmail[] | null>;
+  /** Re-reads the signed-in user (e.g. after a profile change). */
+  refreshUser?(): Promise<User | null>;
   getCurrentUser(): Promise<User | null>;
   /**
    * Always resolves for a well-formed request, even if the email is already

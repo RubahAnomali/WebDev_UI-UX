@@ -11,7 +11,7 @@ import { TextField } from '../../components/ui/TextField';
 import { ROUTES } from '../../lib/routes';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
 import { useAuth } from '../../services/auth/AuthContext';
-import type { AccountType } from '../../services/auth/types';
+import { AuthError, type AccountType } from '../../services/auth/types';
 import { getPendingSignup, setPendingSignup } from './pendingSignup';
 import { hasErrors, validateRegister, type FieldErrors, type RegisterValues } from './validation';
 import styles from './AuthPage.module.css';
@@ -23,7 +23,7 @@ const ACCOUNT_OPTIONS: ChoiceOption<AccountType>[] = [
 
 const ACCOUNT_HELP: Record<AccountType, string> = {
   individual: 'For adopting a companion, or responsibly rehoming a pet you own.',
-  organization: 'For shelters and rescues. We’ll verify your organization before your listings go live.',
+  organization: 'For shelters and rescues listing animals in their care.',
 };
 
 const FIELD_ORDER: (keyof RegisterValues)[] = ['fullName', 'email', 'password', 'location', 'consent'];
@@ -50,6 +50,8 @@ export function RegisterPage() {
   });
 
   const [accountType, setAccountType] = useState<AccountType>(restored?.accountType ?? 'individual');
+  const [organizationName, setOrganizationName] = useState('');
+  const [orgError, setOrgError] = useState<string | undefined>();
   const [values, setValues] = useState<RegisterValues>({
     fullName: restored?.fullName ?? '',
     email: '',
@@ -76,6 +78,13 @@ export function RegisterPage() {
     setFormError(null);
     const found = validateRegister(values);
     setErrors(found);
+    const orgMissing =
+      accountType === 'organization' && organizationName.trim().length < 2 ? 'Enter your shelter or rescue’s name.' : undefined;
+    setOrgError(orgMissing);
+    if (orgMissing && !hasErrors(found)) {
+      document.getElementById('register-org')?.focus();
+      return;
+    }
     if (hasErrors(found)) {
       const first = FIELD_ORDER.find((k) => found[k]);
       if (first) document.getElementById(FIELD_IDS[first])?.focus();
@@ -90,12 +99,34 @@ export function RegisterPage() {
         location: values.location,
         accountType,
         acceptedTerms: values.consent,
+        organizationName: accountType === 'organization' ? organizationName.trim() : undefined,
       });
       setPendingSignup({ email, fullName: values.fullName.trim(), location: values.location.trim(), accountType });
       navigate(ROUTES.verifyEmail, { state: { reason: 'registered' } });
-    } catch {
+    } catch (err) {
       setSubmitting(false);
-      setFormError('We couldn’t create your account just now. Please try again in a moment.');
+      if (err instanceof AuthError && err.code === 'VALIDATION' && err.fields) {
+        const map: Partial<Record<string, keyof RegisterValues>> = {
+          fullName: 'fullName',
+          email: 'email',
+          password: 'password',
+          location: 'location',
+          acceptedTerms: 'consent',
+        };
+        const serverErrors: FieldErrors<keyof RegisterValues> = {};
+        for (const [k, v] of Object.entries(err.fields)) {
+          const key = map[k];
+          if (key) serverErrors[key] = v;
+        }
+        setErrors(serverErrors);
+        setAttempted(true);
+        return;
+      }
+      setFormError(
+        err instanceof AuthError && err.code === 'RATE_LIMITED'
+          ? 'Too many attempts from this device. Please wait a few minutes and try again.'
+          : 'We couldn’t create your account just now. Please try again in a moment.',
+      );
     }
   }
 
@@ -126,6 +157,23 @@ export function RegisterPage() {
           onChange={setAccountType}
           help={ACCOUNT_HELP[accountType]}
         />
+        {accountType === 'organization' && (
+          <TextField
+            id="register-org"
+            label="Shelter or rescue name"
+            name="organization"
+            autoComplete="organization"
+            placeholder="Happy Tails Rescue"
+            value={organizationName}
+            onChange={(e) => {
+              setOrganizationName(e.target.value);
+              if (orgError) setOrgError(undefined);
+            }}
+            error={orgError}
+            hint="We’ll verify your organization before its listings go live."
+            required
+          />
+        )}
         <TextField
           id={FIELD_IDS.fullName}
           label={accountType === 'organization' ? 'Your full name' : 'Full name'}

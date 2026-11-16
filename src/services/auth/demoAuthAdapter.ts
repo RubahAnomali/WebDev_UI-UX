@@ -168,6 +168,11 @@ export function createDemoAuthAdapter(options: DemoAuthOptions = {}): AuthServic
   return {
     isDemo: true,
 
+    async getDevMailbox(email: string) {
+      const to = normalizeEmail(email);
+      return readDemoOutbox().filter((m) => m.to === to);
+    },
+
     async getCurrentUser() {
       const session = currentSession();
       if (!session) return null;
@@ -205,6 +210,9 @@ export function createDemoAuthAdapter(options: DemoAuthOptions = {}): AuthServic
         // Only ever "member" at sign-up. Seller/admin are server-granted.
         roles: ['member'],
         emailVerified: false,
+        phone: null,
+        organization: null,
+        listingRulesAccepted: false,
         organizationVerification: input.accountType === 'organization' ? 'pending' : 'not_applicable',
         createdAt: new Date(now()).toISOString(),
         salt,

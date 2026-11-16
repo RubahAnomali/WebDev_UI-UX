@@ -10,7 +10,7 @@ import { readJSON, writeJSON } from '../../lib/storage';
 import { useDocumentTitle } from '../../lib/useDocumentTitle';
 import { useAuth } from '../../services/auth/AuthContext';
 import { AuthError, RESEND_COOLDOWN_SECONDS } from '../../services/auth/types';
-import { DemoOutbox } from './DemoOutbox';
+import { DevMailbox } from './DevMailbox';
 import { clearPendingSignup, getPendingSignup } from './pendingSignup';
 import styles from './AuthPage.module.css';
 
@@ -176,7 +176,7 @@ function CheckInbox() {
         You can request another email after {RESEND_COOLDOWN_SECONDS} seconds.
       </p>
 
-      <DemoOutbox email={email} match="verify" />
+      <DevMailbox email={email} match="verify" />
     </AuthLayout>
   );
 }

@@ -64,6 +64,7 @@ describe('Registration flow', () => {
     expect(shelter).toBeChecked();
     expect(screen.getByText(/verify your organization/i)).toBeInTheDocument();
 
+    await user.type(screen.getByLabelText('Shelter or rescue name'), 'Happy Tails Rescue');
     await user.type(screen.getByLabelText(/full name/i), 'Alex Morgan');
     await user.type(screen.getByLabelText('Email address'), 'alex@example.com');
     await user.type(screen.getByLabelText('Password', { selector: 'input' }), 'Sunny-window-42');
@@ -76,7 +77,7 @@ describe('Registration flow', () => {
     expect(screen.getByRole('heading', { name: 'Check your inbox.' })).toBeInTheDocument();
     expect(screen.getByText('alex@example.com')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /resend available in/i })).toBeDisabled();
-    expect(screen.getByRole('link', { name: /open link from email/i })).toBeInTheDocument();
+    expect(await screen.findByRole('link', { name: /open link from email/i })).toBeInTheDocument();
   });
 
   it('requires consent', async () => {
