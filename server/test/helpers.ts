@@ -52,6 +52,12 @@ export const tokenFrom = (link: string | null | undefined) => new URL(link!).sea
 
 export const PASSWORD = 'Sunny-window-42';
 
+export const ORG_EVIDENCE = {
+  organizationName: 'Happy Tails Rescue',
+  registrationNumber: 'TX-501C3-12345',
+  website: 'https://happytails.example.org',
+};
+
 /** Registers + verifies + logs in a user, returning the client. */
 export async function signUp(
   app: FastifyInstance,
@@ -66,6 +72,7 @@ export async function signUp(
     location: 'Austin, TX',
     accountType: opts.accountType ?? 'individual',
     acceptedTerms: true,
+    ...(opts.accountType === 'organization' ? ORG_EVIDENCE : {}),
   });
   const mail = await latestEmail(email, 'verify');
   await c.post('/api/auth/verify-email', { token: tokenFrom(mail?.link) });

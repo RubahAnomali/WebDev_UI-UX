@@ -59,7 +59,13 @@ export function authRoutes(app: FastifyInstance, { db, mailer }: { db: DB; maile
       if (input.accountType === 'organization') {
         const org = await trx
           .insertInto('organizations')
-          .values({ name: input.organizationName || `${input.fullName}’s organization`, city: input.location })
+          .values({
+            name: input.organizationName!.trim(),
+            city: input.location,
+            registration_number: input.registrationNumber?.trim() || null,
+            website: input.website?.trim() || null,
+            reference: input.reference?.trim() || null,
+          })
           .returning('id')
           .executeTakeFirstOrThrow();
         organizationId = org.id;

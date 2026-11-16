@@ -74,6 +74,7 @@ export interface OrgItem {
   city: string;
   status: string;
   createdAt: string;
+  evidence: { registrationNumber: string | null; website: string | null; reference: string | null };
   contact: { name: string; email: string; emailVerified: boolean } | null;
 }
 export interface MemberItem {

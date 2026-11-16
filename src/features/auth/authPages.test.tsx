@@ -62,9 +62,14 @@ describe('Registration flow', () => {
     const shelter = screen.getByRole('radio', { name: 'Shelter / rescue' });
     await user.click(shelter);
     expect(shelter).toBeChecked();
-    expect(screen.getByText(/verify your organization/i)).toBeInTheDocument();
+    expect(screen.getByText(/We verify every organization/i)).toBeInTheDocument();
 
-    await user.type(screen.getByLabelText('Shelter or rescue name'), 'Happy Tails Rescue');
+    await user.type(screen.getByLabelText('Shelter or rescue name *'), 'Happy Tails Rescue');
+    await user.click(screen.getByRole('button', { name: 'Create account' }));
+    expect(screen.getByText('Enter your registration or charity number.')).toBeInTheDocument();
+    expect(screen.getByText('Add a website or social page, or a reference.')).toBeInTheDocument();
+    await user.type(screen.getByLabelText('Registration or charity number *'), 'TX-501C3-12345');
+    await user.type(screen.getByLabelText('A reference we can contact'), 'Dr. Lee, Austin Vet Clinic');
     await user.type(screen.getByLabelText(/full name/i), 'Alex Morgan');
     await user.type(screen.getByLabelText('Email address'), 'alex@example.com');
     await user.type(screen.getByLabelText('Password', { selector: 'input' }), 'Sunny-window-42');

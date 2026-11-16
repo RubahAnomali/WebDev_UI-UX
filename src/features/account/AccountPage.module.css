@@ -219,3 +219,49 @@
     margin-left: 0;
   }
 }
+
+.cardHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 20px;
+}
+
+.cardHead .cardTitle {
+  margin-bottom: 0;
+}
+
+.cardAlert {
+  margin-bottom: 18px;
+}
+
+.orgFacts {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+}
+
+.orgFacts > div {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.orgFacts dt {
+  color: var(--color-muted);
+}
+
+.orgFacts dd {
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+}
+
+.orgSave {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}

@@ -15,6 +15,7 @@ import { accountService, type Prefs } from '../../services/account/accountServic
 import { ApiRequestError } from '../../services/api/client';
 import { useAuth } from '../../services/auth/AuthContext';
 import { validateEmail, validateNewPassword } from '../auth/validation';
+import { OrganizationCard } from './OrganizationCard';
 import styles from './AccountPage.module.css';
 
 const NAV = [
@@ -136,18 +137,10 @@ export function AccountPage() {
                 hint="Only shared when you send an adoption request. Never shown on listings."
                 onChange={(e) => setProfile((p) => ({ ...p, phone: e.target.value }))}
               />
-              {user.accountType === 'organization' && user.organization && (
-                <div className={styles.verified}>
-                  <p className={styles.small}>
-                    Organization: <strong>{user.organization.name}</strong>
-                  </p>
-                  <p className={user.organization.verification === 'verified' ? styles.verifiedLine : styles.pending}>
-                    {user.organization.verification === 'verified' ? 'Verified shelter / rescue' : 'Verification in progress'}
-                  </p>
-                </div>
-              )}
             </div>
           </section>
+
+          {user.accountType === 'organization' && user.organization && <OrganizationCard />}
 
           <section className={styles.card} aria-labelledby="acc-notify">
             <h2 id="acc-notify" className={styles.cardTitle}>

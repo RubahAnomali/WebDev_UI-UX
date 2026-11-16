@@ -13,6 +13,7 @@ import { useDocumentTitle } from '../../lib/useDocumentTitle';
 import { useAuth } from '../../services/auth/AuthContext';
 import { AuthError, type AccountType } from '../../services/auth/types';
 import { getPendingSignup, setPendingSignup } from './pendingSignup';
+import { OrgEvidenceFields, ORG_ORDER, validateOrg, type OrgValues } from './OrgEvidenceFields';
 import { hasErrors, validateRegister, type FieldErrors, type RegisterValues } from './validation';
 import styles from './AuthPage.module.css';
 
@@ -50,8 +51,8 @@ export function RegisterPage() {
   });
 
   const [accountType, setAccountType] = useState<AccountType>(restored?.accountType ?? 'individual');
-  const [organizationName, setOrganizationName] = useState('');
-  const [orgError, setOrgError] = useState<string | undefined>();
+  const [org, setOrg] = useState<OrgValues>({ organizationName: '', registrationNumber: '', website: '', reference: '' });
+  const [orgErrors, setOrgErrors] = useState<Partial<Record<keyof OrgValues, string>>>({});
   const [values, setValues] = useState<RegisterValues>({
     fullName: restored?.fullName ?? '',
     email: '',
@@ -78,11 +79,11 @@ export function RegisterPage() {
     setFormError(null);
     const found = validateRegister(values);
     setErrors(found);
-    const orgMissing =
-      accountType === 'organization' && organizationName.trim().length < 2 ? 'Enter your shelter or rescue’s name.' : undefined;
-    setOrgError(orgMissing);
-    if (orgMissing && !hasErrors(found)) {
-      document.getElementById('register-org')?.focus();
+    const foundOrg = accountType === 'organization' ? validateOrg(org) : {};
+    setOrgErrors(foundOrg);
+    const firstOrg = ORG_ORDER.find((k) => foundOrg[k]);
+    if (firstOrg && !hasErrors(found)) {
+      document.getElementById(`register-${firstOrg}`)?.focus();
       return;
     }
     if (hasErrors(found)) {
@@ -99,7 +100,14 @@ export function RegisterPage() {
         location: values.location,
         accountType,
         acceptedTerms: values.consent,
-        organizationName: accountType === 'organization' ? organizationName.trim() : undefined,
+        ...(accountType === 'organization'
+          ? {
+              organizationName: org.organizationName.trim(),
+              registrationNumber: org.registrationNumber.trim(),
+              website: org.website.trim(),
+              reference: org.reference.trim(),
+            }
+          : {}),
       });
       setPendingSignup({ email, fullName: values.fullName.trim(), location: values.location.trim(), accountType });
       navigate(ROUTES.verifyEmail, { state: { reason: 'registered' } });
@@ -114,11 +122,14 @@ export function RegisterPage() {
           acceptedTerms: 'consent',
         };
         const serverErrors: FieldErrors<keyof RegisterValues> = {};
+        const serverOrgErrors: Partial<Record<keyof OrgValues, string>> = {};
         for (const [k, v] of Object.entries(err.fields)) {
           const key = map[k];
           if (key) serverErrors[key] = v;
+          else if ((ORG_ORDER as string[]).includes(k)) serverOrgErrors[k as keyof OrgValues] = v;
         }
         setErrors(serverErrors);
+        setOrgErrors(serverOrgErrors);
         setAttempted(true);
         return;
       }
@@ -158,20 +169,16 @@ export function RegisterPage() {
           help={ACCOUNT_HELP[accountType]}
         />
         {accountType === 'organization' && (
-          <TextField
-            id="register-org"
-            label="Shelter or rescue name"
-            name="organization"
-            autoComplete="organization"
-            placeholder="Happy Tails Rescue"
-            value={organizationName}
-            onChange={(e) => {
-              setOrganizationName(e.target.value);
-              if (orgError) setOrgError(undefined);
+          <OrgEvidenceFields
+            idPrefix="register"
+            values={org}
+            errors={orgErrors}
+            onChange={(key, value) => {
+              setOrg((o) => ({ ...o, [key]: value }));
+              if (orgErrors[key] || (key === 'reference' && orgErrors.website)) {
+                setOrgErrors((e) => ({ ...e, [key]: undefined, ...(key === 'reference' ? { website: undefined } : {}) }));
+              }
             }}
-            error={orgError}
-            hint="We’ll verify your organization before its listings go live."
-            required
           />
         )}
         <TextField

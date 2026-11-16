@@ -365,7 +365,7 @@ export function adminRoutes(app: FastifyInstance, { db, mailer }: { db: DB; mail
     const rows = await db
       .selectFrom('organizations as o')
       .leftJoin('users as u', 'u.organization_id', 'o.id')
-      .select(['o.id', 'o.name', 'o.city', 'o.verification_status', 'o.created_at', 'u.full_name', 'u.email', 'u.email_verified_at'])
+      .select(['o.id', 'o.name', 'o.city', 'o.verification_status', 'o.created_at', 'o.registration_number', 'o.website', 'o.reference', 'u.full_name', 'u.email', 'u.email_verified_at'])
       .where('o.verification_status', '=', 'pending')
       .orderBy('o.created_at')
       .execute();
@@ -376,6 +376,7 @@ export function adminRoutes(app: FastifyInstance, { db, mailer }: { db: DB; mail
         city: o.city,
         status: o.verification_status,
         createdAt: o.created_at.toISOString(),
+        evidence: { registrationNumber: o.registration_number, website: o.website, reference: o.reference },
         contact: o.full_name ? { name: o.full_name, email: o.email, emailVerified: Boolean(o.email_verified_at) } : null,
       })),
     };
@@ -387,6 +388,9 @@ export function adminRoutes(app: FastifyInstance, { db, mailer }: { db: DB; mail
     const input = parse(orgDecisionSchema, req.body);
     const org = await db.selectFrom('organizations').selectAll().where('id', '=', req.params.id).executeTakeFirst();
     if (!org) throw notFound('That organization');
+    if (input.decision === 'verify' && (!org.registration_number || !(org.website || org.reference))) {
+      throw new ApiError('CONFLICT', 'This organization hasn’t provided a registration number and supporting evidence yet.');
+    }
     const status = input.decision === 'verify' ? 'verified' : 'rejected';
     await db
       .updateTable('organizations')

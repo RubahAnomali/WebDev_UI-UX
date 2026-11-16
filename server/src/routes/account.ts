@@ -2,7 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import { RESET_TOKEN_TTL_MS } from '../../../shared/constants.ts';
-import { emailSchema, fullNameSchema, locationSchema, newPasswordSchema, tokenSchema } from '../../../shared/schemas/auth.ts';
+import { emailSchema, fullNameSchema, locationSchema, newPasswordSchema, orgEvidenceSchema, tokenSchema } from '../../../shared/schemas/auth.ts';
 import { destroyAllSessions, requireUser } from '../auth/session.ts';
 import { consumeToken, issueToken } from '../auth/tokens.ts';
 import { config } from '../config.ts';
@@ -81,6 +81,30 @@ export function accountRoutes(app: FastifyInstance, { db, mailer }: { db: DB; ma
         .execute();
     }
     return { user: await loadApiUser(db, user.id), prefs: await prefsFor(user.id) };
+  });
+
+  /** Pending shelters can add or correct their verification evidence. */
+  app.patch('/api/account/organization', async (req) => {
+    const user = requireUser(req);
+    if (!user.organization_id) throw new ApiError('FORBIDDEN', 'Only shelter / rescue accounts have organization details.');
+    const org = await db.selectFrom('organizations').select('verification_status').where('id', '=', user.organization_id).executeTakeFirstOrThrow();
+    if (org.verification_status === 'verified') {
+      throw new ApiError('CONFLICT', 'Your organization is already verified. Contact support to change its details.');
+    }
+    const input = parse(orgEvidenceSchema, req.body);
+    await db
+      .updateTable('organizations')
+      .set({
+        name: input.organizationName!.trim(),
+        registration_number: input.registrationNumber?.trim() || null,
+        website: input.website?.trim() || null,
+        reference: input.reference?.trim() || null,
+        // A declined organization that updates its evidence goes back into the queue.
+        verification_status: 'pending',
+      })
+      .where('id', '=', user.organization_id)
+      .execute();
+    return { user: await loadApiUser(db, user.id) };
   });
 
   app.post('/api/account/password', sensitive, async (req) => {

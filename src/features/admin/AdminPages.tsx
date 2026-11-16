@@ -272,7 +272,10 @@ export function AdminOrganizationsPage() {
   return (
     <AdminLayout title="Organizations">
       <h2 className={styles.sectionTitle}>Shelters &amp; rescues awaiting verification</h2>
-      <p className={styles.muted}>Confirm the organization is real (registration, website, references) before verifying.</p>
+      <p className={styles.muted}>
+        Check the registration number with the state or charity register, open the website, and contact the reference before verifying.
+        Organizations without evidence can’t be verified until they add it in their account.
+      </p>
       {message && (
         <Alert tone={message.tone} className={styles.message}>
           {message.text}
@@ -293,9 +296,35 @@ export function AdminOrganizationsPage() {
                   Contact: {o.contact.name} · {o.contact.email} · {o.contact.emailVerified ? 'email verified' : 'email not verified'}
                 </p>
               )}
+              <dl className={styles.evidence}>
+                <div>
+                  <dt>Registration</dt>
+                  <dd>{o.evidence.registrationNumber ?? <span className={styles.missing}>Not provided</span>}</dd>
+                </div>
+                <div>
+                  <dt>Website</dt>
+                  <dd>
+                    {o.evidence.website ? (
+                      <a href={o.evidence.website} target="_blank" rel="noopener noreferrer nofollow">
+                        {o.evidence.website}
+                      </a>
+                    ) : (
+                      '—'
+                    )}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Reference</dt>
+                  <dd>{o.evidence.reference ?? '—'}</dd>
+                </div>
+              </dl>
             </div>
             <div className={styles.cardActions}>
-              <Button onClick={() => decide(o, 'verify')} loading={busy === o.id && !rejecting}>
+              <Button
+                onClick={() => decide(o, 'verify')}
+                loading={busy === o.id && !rejecting}
+                disabled={!o.evidence.registrationNumber || !(o.evidence.website || o.evidence.reference)}
+              >
                 Verify
               </Button>
               <button type="button" className={styles.reject} onClick={() => setRejecting(o)}>

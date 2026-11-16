@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { Client, latestEmail, makeApp, PASSWORD, signUp, tokenFrom } from './helpers.ts';
+import { Client, latestEmail, makeApp, ORG_EVIDENCE, PASSWORD, signUp, tokenFrom } from './helpers.ts';
 import { testDb } from './setup.ts';
 
 let app: FastifyInstance;
@@ -62,10 +62,15 @@ describe('registration', () => {
 
   it('creates a pending organization for shelters', async () => {
     const c = new Client(app);
-    await c.post('/api/auth/register', { ...registration, accountType: 'organization', organizationName: 'Happy Tails' });
+    const missing = await c.post('/api/auth/register', { ...registration, accountType: 'organization', organizationName: 'Happy Tails' });
+    expect(missing.statusCode).toBe(400);
+    expect(Object.keys(missing.json().error.fields)).toEqual(expect.arrayContaining(['registrationNumber', 'website']));
+    await c.post('/api/auth/register', { ...registration, accountType: 'organization', ...ORG_EVIDENCE });
     const user = await testDb.selectFrom('users').selectAll().where('email', '=', 'alex@example.com').executeTakeFirstOrThrow();
     const org = await testDb.selectFrom('organizations').selectAll().where('id', '=', user.organization_id!).executeTakeFirstOrThrow();
     expect(org.verification_status).toBe('pending');
+    expect(org.registration_number).toBe('TX-501C3-12345');
+    expect(org.website).toBe('https://happytails.example.org');
     expect(user.roles).toEqual(['member']);
   });
 

@@ -33,6 +33,8 @@ export interface OrganizationsTable {
   verified_by: string | null;
   verified_at: NullableTimestamp;
   verification_note: string | null;
+  registration_number: string | null;
+  reference: string | null;
   is_sample: Generated<boolean>;
   created_at: Generated<Date>;
 }

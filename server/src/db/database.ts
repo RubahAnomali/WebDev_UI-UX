@@ -4,6 +4,7 @@ import pg from 'pg';
 import { config } from '../config.ts';
 import * as m001 from './migrations/001_init.ts';
 import * as m002 from './migrations/002_listing_headline.ts';
+import * as m003 from './migrations/003_org_evidence.ts';
 import type { Database } from './schema.ts';
 
 // Return BIGINT/NUMERIC as numbers where safe; dates stay Date objects.
@@ -19,7 +20,7 @@ export type DB = Kysely<Database>;
 
 class StaticProvider implements MigrationProvider {
   async getMigrations(): Promise<Record<string, Migration>> {
-    return { '001_init': m001, '002_listing_headline': m002 };
+    return { '001_init': m001, '002_listing_headline': m002, '003_org_evidence': m003 };
   }
 }
 

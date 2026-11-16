@@ -14,6 +14,8 @@ export const accountService = {
   changeEmail: (newEmail: string, password: string) => http.post('/api/account/email', { newEmail, password }),
   confirmEmail: (token: string) => http.post<{ email: string }>('/api/auth/confirm-email-change', { token }),
   logoutOthers: () => http.post('/api/account/logout-others'),
+  updateOrganization: (values: { organizationName: string; registrationNumber: string; website: string; reference: string }) =>
+    http.patch<{ user: User }>('/api/account/organization', values),
   /** Permanently deletes the account (requires the password and the typed word DELETE). */
   remove: (password: string) => api('DELETE', '/api/account', { password, confirm: 'DELETE' }),
 };

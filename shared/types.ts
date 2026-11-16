@@ -10,7 +10,15 @@ export interface ApiUser {
   accountType: AccountType;
   roles: Role[];
   emailVerified: boolean;
-  organization: { id: string; name: string; verification: OrganizationVerification } | null;
+  organization: {
+    id: string;
+    name: string;
+    verification: OrganizationVerification;
+    registrationNumber: string | null;
+    website: string | null;
+    reference: string | null;
+    note: string | null;
+  } | null;
   organizationVerification: OrganizationVerification;
   listingRulesAccepted: boolean;
   createdAt: string;

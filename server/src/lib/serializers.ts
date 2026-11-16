@@ -19,6 +19,10 @@ export async function loadApiUser(db: DB, userId: string): Promise<ApiUser | nul
       'organizations.id as org_id',
       'organizations.name as org_name',
       'organizations.verification_status as org_status',
+      'organizations.registration_number as org_reg',
+      'organizations.website as org_website',
+      'organizations.reference as org_reference',
+      'organizations.verification_note as org_note',
     ])
     .where('users.id', '=', userId)
     .executeTakeFirst();
@@ -33,7 +37,17 @@ export async function loadApiUser(db: DB, userId: string): Promise<ApiUser | nul
     accountType: row.account_type,
     roles: row.roles as ApiUser['roles'],
     emailVerified: Boolean(row.email_verified_at),
-    organization: row.org_id ? { id: row.org_id, name: row.org_name ?? '', verification: orgVerification } : null,
+    organization: row.org_id
+      ? {
+          id: row.org_id,
+          name: row.org_name ?? '',
+          verification: orgVerification,
+          registrationNumber: row.org_reg,
+          website: row.org_website,
+          reference: row.org_reference,
+          note: row.org_note,
+        }
+      : null,
     organizationVerification: orgVerification,
     listingRulesAccepted: Boolean(row.listing_rules_accepted_at),
     createdAt: row.created_at.toISOString(),

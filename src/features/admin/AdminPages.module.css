@@ -514,3 +514,36 @@
     grid-template-columns: 1fr;
   }
 }
+
+.evidence {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 12px 0 0;
+  font-size: 13px;
+}
+
+.evidence > div {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 8px;
+}
+
+.evidence dt {
+  color: var(--color-muted);
+}
+
+.evidence dd {
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+}
+
+.evidence a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.missing {
+  font-weight: 600;
+  color: var(--color-warning);
+}

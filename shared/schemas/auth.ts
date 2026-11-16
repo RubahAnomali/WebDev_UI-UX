@@ -27,15 +27,58 @@ export const locationSchema = z
   .min(2, 'Enter your city or ZIP code.')
   .max(80, 'Please use 80 characters or fewer.');
 
-export const registerSchema = z.object({
-  fullName: fullNameSchema,
-  email: emailSchema,
-  password: newPasswordSchema,
-  location: locationSchema,
-  accountType: z.enum(ACCOUNT_TYPES),
-  acceptedTerms: z.literal(true, { error: 'Please confirm you’re 18 or older and agree to the terms.' }),
-  organizationName: z.string().trim().max(120).optional(),
-});
+/* ---------- Shelter / rescue verification evidence ---------- */
+
+const optionalText = (max: number) => z.string().trim().max(max, `Please use ${max} characters or fewer.`).optional().or(z.literal(''));
+
+export const orgEvidenceFields = {
+  organizationName: z.string().trim().max(120, 'Please use 120 characters or fewer.').optional(),
+  registrationNumber: optionalText(60),
+  website: optionalText(200),
+  reference: optionalText(300),
+};
+
+type Evidence = { organizationName?: string; registrationNumber?: string; website?: string; reference?: string };
+
+/**
+ * A shelter must give its name, a registration / charity number, and at least
+ * one more piece of evidence: a website or social page, or a reference.
+ */
+export function checkOrgEvidence(v: Evidence, ctx: z.RefinementCtx) {
+  if ((v.organizationName ?? '').trim().length < 2) {
+    ctx.addIssue({ code: 'custom', path: ['organizationName'], message: 'Enter your shelter or rescue’s name.' });
+  }
+  if ((v.registrationNumber ?? '').trim().length < 3) {
+    ctx.addIssue({ code: 'custom', path: ['registrationNumber'], message: 'Enter your registration or charity number.' });
+  }
+  const website = (v.website ?? '').trim();
+  const reference = (v.reference ?? '').trim();
+  if (website && !/^https?:\/\/[^\s.]+\.[^\s]{2,}$/i.test(website)) {
+    ctx.addIssue({ code: 'custom', path: ['website'], message: 'Enter a full link, like https://happytails.org.' });
+  }
+  if (reference && reference.length < 10) {
+    ctx.addIssue({ code: 'custom', path: ['reference'], message: 'Add a little more detail (10+ characters).' });
+  }
+  if (!website && !reference) {
+    ctx.addIssue({ code: 'custom', path: ['website'], message: 'Add a website or social page, or a reference.' });
+  }
+}
+
+export const orgEvidenceSchema = z.object(orgEvidenceFields).superRefine(checkOrgEvidence);
+
+export const registerSchema = z
+  .object({
+    fullName: fullNameSchema,
+    email: emailSchema,
+    password: newPasswordSchema,
+    location: locationSchema,
+    accountType: z.enum(ACCOUNT_TYPES),
+    acceptedTerms: z.literal(true, { error: 'Please confirm you’re 18 or older and agree to the terms.' }),
+    ...orgEvidenceFields,
+  })
+  .superRefine((v, ctx) => {
+    if (v.accountType === 'organization') checkOrgEvidence(v, ctx);
+  });
 
 export const loginSchema = z.object({
   email: emailSchema,
