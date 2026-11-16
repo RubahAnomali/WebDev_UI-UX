@@ -15,6 +15,7 @@ import { authRoutes } from './routes/auth.ts';
 import { listingRoutes } from './routes/listings.ts';
 import { meRoutes } from './routes/me.ts';
 import { myListingRoutes } from './routes/myListings.ts';
+import { requestRoutes } from './routes/requests.ts';
 import { systemRoutes } from './routes/system.ts';
 
 export interface AppDeps {
@@ -83,6 +84,7 @@ export async function buildApp({ db, mailer = createMailer(db), logger = !config
   meRoutes(app, deps);
   listingRoutes(app, deps);
   myListingRoutes(app, deps);
+  requestRoutes(app, deps);
 
   // Uploaded photos (already re-encoded and EXIF-stripped on upload).
   if (!existsSync(config.uploadDir)) mkdirSync(config.uploadDir, { recursive: true });

@@ -127,3 +127,27 @@ export function multipart(buffer: Buffer, filename = 'photo.jpg', contentType = 
   const tail = Buffer.from(`\r\n--${boundary}--\r\n`);
   return { payload: Buffer.concat([head, buffer, tail]), headers: { 'content-type': `multipart/form-data; boundary=${boundary}` } };
 }
+
+export const REQUEST = {
+  fullName: 'Jamie Parker',
+  phone: '(512) 555-0142',
+  city: 'Austin, TX',
+  homeType: 'house',
+  housingPermission: 'own',
+  household: 'Two adults, no children. We have a secure, fenced yard.',
+  otherPets: 'None',
+  experience: 'Previously cared for a senior dog.',
+  message: 'I’m looking for a gentle companion and can offer a calm home.',
+  agreeCare: true,
+  agreeShare: true,
+};
+
+/** A seller with one live listing. */
+export async function liveListingFor(app: FastifyInstance, overrides: Record<string, unknown> = {}) {
+  const seller = await signUp(app);
+  const { id } = await createListing(seller.client, overrides);
+  await seller.client.post(`/api/my/listings/${id}/submit`, ATTEST);
+  const { testDb } = await import('./setup.ts');
+  await testDb.updateTable('listings').set({ status: 'live', published_at: new Date() }).where('id', '=', id).execute();
+  return { seller, listingId: id };
+}

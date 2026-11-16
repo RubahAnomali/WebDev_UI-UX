@@ -9,6 +9,11 @@ import { ListingSubmittedPage } from './features/listings/ListingSubmittedPage';
 import { MyListingsPage } from './features/listings/MyListingsPage';
 import { PostPetPage } from './features/listings/PostPetPage';
 import { FindPetPage } from './features/pets/FindPetPage';
+import { ApplyPage } from './features/requests/ApplyPage';
+import { ListingRequestsPage } from './features/requests/ListingRequestsPage';
+import { MyRequestsPage } from './features/requests/MyRequestsPage';
+import { RequestSentPage } from './features/requests/RequestSentPage';
+import { RequestStatusPage } from './features/requests/RequestStatusPage';
 import { PetProfilePage } from './features/pets/PetProfilePage';
 import { SavedPetsPage } from './features/pets/SavedPetsPage';
 import { RequireAuth } from './components/layout/RequireAuth';
@@ -67,6 +72,46 @@ export function App() {
           element={
             <RequireAuth>
               <MyListingsPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path={`${ROUTES.findPet}/:petId/apply`}
+          element={
+            <RequireAuth>
+              <ApplyPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path={ROUTES.requests}
+          element={
+            <RequireAuth>
+              <MyRequestsPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path={`${ROUTES.requests}/:requestId`}
+          element={
+            <RequireAuth>
+              <RequestStatusPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path={`${ROUTES.requests}/:requestId/sent`}
+          element={
+            <RequireAuth>
+              <RequestSentPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path={`${ROUTES.myListings}/:listingId/requests`}
+          element={
+            <RequireAuth>
+              <ListingRequestsPage />
             </RequireAuth>
           }
         />
