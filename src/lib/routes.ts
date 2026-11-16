@@ -39,19 +39,7 @@ export const listingRequestsPath = (id: string) => `/my-listings/${id}/requests`
  * Destinations that belong to later phases. They render an honest
  * "coming soon" page instead of a fake implementation.
  */
-export const UPCOMING_PAGES: Record<string, { title: string; summary: string }> = {
-  [ROUTES.about]: { title: 'Our mission', summary: 'Why Pawhaven puts pet welfare first.' },
-  [ROUTES.rehomingGuide]: { title: 'Rehoming guide', summary: 'Practical guidance for rehoming a pet responsibly.' },
-  [ROUTES.resources]: { title: 'Pet care resources', summary: 'Helpful reading for new and experienced pet parents.' },
-  [ROUTES.safety]: {
-    title: 'Safety & support',
-    summary: 'How to meet safely, spot scams, and report something that doesn’t feel right.',
-  },
-  [ROUTES.contact]: { title: 'Contact us', summary: 'Get in touch with the Pawhaven team.' },
-  [ROUTES.privacy]: { title: 'Privacy policy', summary: 'How Pawhaven collects, uses, and protects your data.' },
-  [ROUTES.terms]: { title: 'Terms of use', summary: 'The rules that keep Pawhaven safe for pets and people.' },
-  [ROUTES.accessibility]: { title: 'Accessibility', summary: 'Our commitment to an accessible Pawhaven.' },
-};
+export const UPCOMING_PAGES: Record<string, { title: string; summary: string }> = {};
 
 /** Signed-in destinations still being built; guarded so they require an account. */
 export const UPCOMING_PRIVATE_PAGES: Record<string, { title: string; summary: string; role?: 'admin' }> = {

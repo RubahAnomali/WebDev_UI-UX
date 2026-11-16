@@ -7,6 +7,16 @@ import { RegisterPage } from './features/auth/RegisterPage';
 import { ResetPasswordPage } from './features/auth/ResetPasswordPage';
 import { VerifyEmailPage } from './features/auth/VerifyEmailPage';
 import { HomePage } from './features/home/HomePage';
+import {
+  AboutPage,
+  AccessibilityPage,
+  ContactPage,
+  PrivacyPage,
+  RehomingGuidePage,
+  ResourcesPage,
+  TermsPage,
+} from './features/info/InfoPages';
+import { SafetyPage } from './features/info/SafetyPage';
 import { ListingSubmittedPage } from './features/listings/ListingSubmittedPage';
 import { MyListingsPage } from './features/listings/MyListingsPage';
 import { PostPetPage } from './features/listings/PostPetPage';
@@ -39,6 +49,15 @@ export function App() {
         <Route path={ROUTES.verifyEmail} element={<VerifyEmailPage />} />
         <Route path={ROUTES.forgotPassword} element={<ForgotPasswordPage />} />
         <Route path={ROUTES.resetPassword} element={<ResetPasswordPage />} />
+
+        <Route path={ROUTES.safety} element={<SafetyPage />} />
+        <Route path={ROUTES.about} element={<AboutPage />} />
+        <Route path={ROUTES.rehomingGuide} element={<RehomingGuidePage />} />
+        <Route path={ROUTES.resources} element={<ResourcesPage />} />
+        <Route path={ROUTES.contact} element={<ContactPage />} />
+        <Route path={ROUTES.terms} element={<TermsPage />} />
+        <Route path={ROUTES.privacy} element={<PrivacyPage />} />
+        <Route path={ROUTES.accessibility} element={<AccessibilityPage />} />
 
         {/* Later-phase destinations: honest placeholders, no fake functionality. */}
         {Object.keys(UPCOMING_PAGES).map((path) => (
