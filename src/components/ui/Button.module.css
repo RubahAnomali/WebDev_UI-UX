@@ -87,3 +87,9 @@
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+
+.danger {
+  --btn-bg: var(--color-error);
+  --btn-fg: #fff;
+  --btn-bg-hover: #8e3329;
+}

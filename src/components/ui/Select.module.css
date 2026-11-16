@@ -1,0 +1,14 @@
+.select {
+  appearance: none;
+  padding-right: 44px;
+  cursor: pointer;
+}
+
+.chevron {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--color-muted);
+}

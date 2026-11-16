@@ -1,0 +1,23 @@
+.control {
+  min-height: 0;
+  align-items: stretch;
+}
+
+.textarea {
+  height: auto;
+  min-height: 78px;
+  padding: 13px 16px;
+  resize: vertical;
+  line-height: 21px;
+}
+
+.hintRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.count {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}

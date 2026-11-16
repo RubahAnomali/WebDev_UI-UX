@@ -83,3 +83,47 @@ export async function grantRole(userId: string, role: 'seller' | 'admin') {
     .where('id', '=', userId)
     .execute();
 }
+
+/** A complete, valid listing payload (all three wizard steps). */
+export const COMPLETE_LISTING = {
+  name: 'Finn',
+  species: 'cat',
+  breed: 'Domestic shorthair',
+  sex: 'male',
+  ageValue: 1,
+  ageUnit: 'years',
+  size: 'small',
+  listingType: 'rehoming',
+  fee: 50,
+  city: 'Austin, TX 78704',
+  vaccinated: 'yes',
+  spayedNeutered: 'yes',
+  microchipped: 'yes',
+  houseTrained: 'yes',
+  goodWith: ['adults', 'cats'],
+  energyLevel: 'moderate',
+  medicalNotes: 'No known medical conditions.',
+  behaviorNotes: 'Enjoys gentle play and quiet spaces.',
+  about: 'Finn is a curious, affectionate cat who loves sunny windows and gentle play every evening.',
+  idealHome: 'A calm indoor home with time for play.',
+  rehomingReason: 'My housing circumstances have changed.',
+  traits: ['Curious', 'Gentle'],
+};
+
+export const ATTEST = { attestations: { owner: true, accurate: true, rules: true } };
+
+export async function createListing(client: Client, overrides: Record<string, unknown> = {}) {
+  const res = await client.post('/api/my/listings', { ...COMPLETE_LISTING, ...overrides });
+  if (res.statusCode !== 200) throw new Error(`create failed: ${res.body}`);
+  return res.json().listing as { id: string; status: string };
+}
+
+/** Builds a multipart body for a single file upload. */
+export function multipart(buffer: Buffer, filename = 'photo.jpg', contentType = 'image/jpeg') {
+  const boundary = '----pawhaven' + Math.random().toString(16).slice(2);
+  const head = Buffer.from(
+    `--${boundary}\r\nContent-Disposition: form-data; name="photo"; filename="${filename}"\r\nContent-Type: ${contentType}\r\n\r\n`,
+  );
+  const tail = Buffer.from(`\r\n--${boundary}--\r\n`);
+  return { payload: Buffer.concat([head, buffer, tail]), headers: { 'content-type': `multipart/form-data; boundary=${boundary}` } };
+}

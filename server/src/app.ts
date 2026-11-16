@@ -14,6 +14,7 @@ import { createMailer, type Mailer } from './lib/mailer.ts';
 import { authRoutes } from './routes/auth.ts';
 import { listingRoutes } from './routes/listings.ts';
 import { meRoutes } from './routes/me.ts';
+import { myListingRoutes } from './routes/myListings.ts';
 import { systemRoutes } from './routes/system.ts';
 
 export interface AppDeps {
@@ -48,7 +49,7 @@ export async function buildApp({ db, mailer = createMailer(db), logger = !config
   });
   await app.register(rateLimit, {
     global: true,
-    max: config.isTest ? 10_000 : 300,
+    max: config.isTest ? 10_000 : config.globalRateLimit,
     timeWindow: '1 minute',
     errorResponseBuilder: (_req, ctx) =>
       new ApiError('RATE_LIMITED', 'Too many attempts. Please wait a moment and try again.', {
@@ -81,6 +82,7 @@ export async function buildApp({ db, mailer = createMailer(db), logger = !config
   authRoutes(app, deps);
   meRoutes(app, deps);
   listingRoutes(app, deps);
+  myListingRoutes(app, deps);
 
   // Uploaded photos (already re-encoded and EXIF-stripped on upload).
   if (!existsSync(config.uploadDir)) mkdirSync(config.uploadDir, { recursive: true });

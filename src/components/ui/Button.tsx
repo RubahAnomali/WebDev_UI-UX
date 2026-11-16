@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Spinner } from './Spinner';
 import styles from './Button.module.css';
 
-type Variant = 'primary' | 'secondary' | 'accent' | 'link';
+type Variant = 'primary' | 'secondary' | 'accent' | 'link' | 'danger';
 type Size = 'md' | 'lg';
 
 interface CommonProps {

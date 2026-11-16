@@ -5,6 +5,9 @@ import { RegisterPage } from './features/auth/RegisterPage';
 import { ResetPasswordPage } from './features/auth/ResetPasswordPage';
 import { VerifyEmailPage } from './features/auth/VerifyEmailPage';
 import { HomePage } from './features/home/HomePage';
+import { ListingSubmittedPage } from './features/listings/ListingSubmittedPage';
+import { MyListingsPage } from './features/listings/MyListingsPage';
+import { PostPetPage } from './features/listings/PostPetPage';
 import { FindPetPage } from './features/pets/FindPetPage';
 import { PetProfilePage } from './features/pets/PetProfilePage';
 import { SavedPetsPage } from './features/pets/SavedPetsPage';
@@ -35,6 +38,38 @@ export function App() {
         ))}
         <Route path={ROUTES.findPet} element={<FindPetPage />} />
         <Route path={`${ROUTES.findPet}/:petId`} element={<PetProfilePage />} />
+        <Route
+          path={ROUTES.postPet}
+          element={
+            <RequireAuth>
+              <PostPetPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path={`${ROUTES.postPet}/:listingId`}
+          element={
+            <RequireAuth>
+              <PostPetPage key="edit" />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path={`${ROUTES.postPet}/:listingId/submitted`}
+          element={
+            <RequireAuth>
+              <ListingSubmittedPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path={ROUTES.myListings}
+          element={
+            <RequireAuth>
+              <MyListingsPage />
+            </RequireAuth>
+          }
+        />
         <Route
           path={ROUTES.saved}
           element={

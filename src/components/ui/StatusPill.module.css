@@ -1,0 +1,54 @@
+.pill {
+  display: inline-flex;
+  align-items: center;
+  min-width: 96px;
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-sand);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.live,
+.approved,
+.verified,
+.resolved {
+  background: var(--color-soft-green);
+}
+
+.pending,
+.in_review,
+.sent,
+.open {
+  background: var(--color-peach-2);
+}
+
+.draft {
+  background: var(--color-lilac);
+}
+
+.meet_invited {
+  background: #dce9e0;
+  color: var(--color-primary);
+}
+
+.changes_requested {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.rejected,
+.declined,
+.withdrawn,
+.dismissed {
+  background: #eeeeea;
+  color: var(--color-muted);
+}
+
+.rehomed {
+  background: var(--color-primary);
+  color: #fff;
+}

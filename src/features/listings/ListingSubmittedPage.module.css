@@ -1,0 +1,67 @@
+.wrap {
+  max-width: calc(856px + 2 * var(--gutter));
+  padding-top: 69px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 24px 90px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: var(--color-surface);
+  text-align: center;
+}
+
+.emblem {
+  width: 128px;
+  height: 118px;
+  border-radius: 24px;
+}
+
+.title {
+  margin-top: 46px;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(30px, 3.2vw, 42px);
+  line-height: 1.2;
+  color: var(--color-ink);
+}
+
+.lead {
+  margin: 22px 0 24px;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+.card > span {
+  justify-content: center;
+  min-width: 190px;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.text {
+  margin-top: 40px;
+  font-size: 15px;
+  line-height: 23px;
+  color: var(--color-muted);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(486px, 100%);
+  margin-top: 54px;
+}
+
+.footnote {
+  margin-top: 50px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-muted);
+}

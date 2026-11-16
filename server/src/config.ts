@@ -20,6 +20,8 @@ export const config = {
   /** Serve the built web client (single-process deploy / e2e). */
   /** Max credential/email requests per IP per 15 minutes. */
   authRateLimit: Number(env.AUTH_RATE_LIMIT ?? 10),
+  /** Max API requests per IP per minute. */
+  globalRateLimit: Number(env.RATE_LIMIT ?? 300),
   serveClient: env.SERVE_CLIENT === 'true' || env.NODE_ENV === 'production',
   clientDist: env.CLIENT_DIST ?? new URL('../../dist/', import.meta.url).pathname,
 };

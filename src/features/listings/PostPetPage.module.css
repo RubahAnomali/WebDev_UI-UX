@@ -1,0 +1,399 @@
+.page {
+  padding-top: 47px;
+}
+
+.narrow {
+  max-width: 640px;
+  padding-top: 64px;
+}
+
+.center {
+  display: grid;
+  place-items: center;
+  min-height: 50vh;
+  color: var(--color-primary);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(32px, 3.2vw, 42px);
+  line-height: 1.19;
+  color: var(--color-ink);
+}
+
+.subtitle {
+  margin-top: 17px;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--color-muted);
+}
+
+.saveExit {
+  flex: none;
+  margin-top: 8px;
+  margin-right: 54px;
+  padding: 6px 4px;
+  border: 0;
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.saveExit:hover:not(:disabled) {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.alert {
+  margin-top: 20px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 840fr) minmax(0, 408fr);
+  column-gap: 48px;
+  row-gap: 46px;
+  margin-top: 34px;
+  align-items: start;
+}
+
+.card {
+  min-width: 0;
+  margin: 0;
+  padding: 26px 27px 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: var(--color-surface);
+}
+
+.cardTitle {
+  margin-bottom: 30px;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.2;
+  color: var(--color-ink);
+}
+
+.cardTitle:focus-visible {
+  outline: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 28px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.checks {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.checks legend {
+  padding: 0;
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+.checkRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+}
+
+.checkRow label span:last-child {
+  font-size: 14px;
+  color: var(--color-ink);
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.tip {
+  padding: 30px 28px 48px;
+  border-radius: 16px;
+  background: var(--color-soft-green);
+}
+
+.tipIcon {
+  color: var(--color-primary);
+}
+
+.tipTitle {
+  margin-top: 58px;
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 2.2vw, 30px);
+  line-height: 1.15;
+  color: var(--color-ink);
+}
+
+.tipText {
+  margin-top: 30px;
+  max-width: 300px;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--color-muted);
+}
+
+.stepNote {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.footer {
+  grid-column: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.back {
+  min-width: 164px;
+}
+
+.next {
+  min-width: 290px;
+}
+
+.checkCard {
+  padding: 26px 26px 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: var(--color-surface);
+}
+
+.checkTitle {
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 2.2vw, 30px);
+  line-height: 1.2;
+  color: var(--color-ink);
+}
+
+.attest {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-top: 54px;
+}
+
+.attest label span:last-child {
+  font-size: 12px;
+}
+
+.verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+/* Review */
+.review {
+  padding-bottom: 48px;
+}
+
+.reviewTop {
+  display: flex;
+  gap: 28px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.reviewArt {
+  flex: none;
+  width: 183px;
+  height: 154px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.reviewArt img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tone_green {
+  background: #e6ecdf;
+}
+.tone_peach {
+  background: #f5e8da;
+}
+.tone_lilac {
+  background: #ede8f0;
+}
+.tone_sage {
+  background: #e9ede3;
+}
+
+.reviewMain {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.reviewName {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-ink);
+}
+
+.reviewMeta {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+.muted {
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--color-muted);
+  white-space: pre-line;
+}
+
+.reviewSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 30px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.reviewSection:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.reviewHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 6px;
+}
+
+.reviewHead h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.reviewSection h4 {
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.editLink {
+  align-self: flex-end;
+  padding: 4px 2px;
+  border: 0;
+  background: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.editLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1000px) {
+  .layout {
+    grid-template-columns: 1fr;
+    row-gap: 28px;
+  }
+  .aside {
+    order: -1;
+    gap: 12px;
+  }
+  .tip {
+    padding: 20px;
+  }
+  .tipTitle {
+    margin-top: 12px;
+    font-size: 22px;
+  }
+  .tipText {
+    margin-top: 10px;
+    max-width: none;
+  }
+  .footer {
+    grid-column: auto;
+  }
+  .saveExit {
+    margin-right: 0;
+  }
+  .attest {
+    margin-top: 24px;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .head {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card {
+    padding: 22px 18px 28px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .footer {
+    flex-direction: column-reverse;
+  }
+  .back,
+  .next {
+    min-width: 0;
+    width: 100%;
+  }
+  .reviewTop {
+    flex-direction: column;
+  }
+  .reviewArt {
+    width: 100%;
+    height: 180px;
+  }
+}

@@ -41,11 +41,6 @@ export const listingRequestsPath = (id: string) => `/my-listings/${id}/requests`
  */
 export const UPCOMING_PAGES: Record<string, { title: string; summary: string }> = {
   [ROUTES.about]: { title: 'Our mission', summary: 'Why Pawhaven puts pet welfare first.' },
-  [ROUTES.postPet]: {
-    title: 'Post a pet',
-    summary: 'A guided, four-step listing flow with moderation before anything goes public.',
-  },
-  [ROUTES.myListings]: { title: 'My listings', summary: 'Manage your listings and the people hoping to meet your pets.' },
   [ROUTES.rehomingGuide]: { title: 'Rehoming guide', summary: 'Practical guidance for rehoming a pet responsibly.' },
   [ROUTES.resources]: { title: 'Pet care resources', summary: 'Helpful reading for new and experienced pet parents.' },
   [ROUTES.safety]: {
