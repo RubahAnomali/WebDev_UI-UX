@@ -8,6 +8,7 @@ import { HomePage } from './features/home/HomePage';
 import { ListingSubmittedPage } from './features/listings/ListingSubmittedPage';
 import { MyListingsPage } from './features/listings/MyListingsPage';
 import { PostPetPage } from './features/listings/PostPetPage';
+import { MessagesPage } from './features/messages/MessagesPage';
 import { FindPetPage } from './features/pets/FindPetPage';
 import { ApplyPage } from './features/requests/ApplyPage';
 import { ListingRequestsPage } from './features/requests/ListingRequestsPage';
@@ -112,6 +113,22 @@ export function App() {
           element={
             <RequireAuth>
               <ListingRequestsPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path={ROUTES.messages}
+          element={
+            <RequireAuth>
+              <MessagesPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path={`${ROUTES.messages}/:conversationId`}
+          element={
+            <RequireAuth>
+              <MessagesPage />
             </RequireAuth>
           }
         />
