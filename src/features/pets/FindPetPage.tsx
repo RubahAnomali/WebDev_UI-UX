@@ -44,7 +44,11 @@ type State =
 
 /** Figma 14:37 — Find a pet. All filters live in the URL so results are shareable. */
 export function FindPetPage() {
-  const [params, setParams] = useSearchParams();
+  const [urlParams, setParams] = useSearchParams();
+  // URL updates run inside a transition; mirror them locally so controls respond instantly.
+  const [pending, setPending] = useState<URLSearchParams | null>(null);
+  if (pending && pending.toString() === urlParams.toString()) setPending(null);
+  const params = pending ?? urlParams;
   const { isSaved, toggle } = useSavedPets();
   const [state, setState] = useState<State>({ kind: 'loading' });
   const [attempt, setAttempt] = useState(0);
@@ -85,6 +89,7 @@ export function FindPetPage() {
     mutator(next);
     next.delete('page');
     setState({ kind: 'loading' });
+    setPending(next);
     setParams(next, { replace: false });
   }
 
@@ -131,6 +136,7 @@ export function FindPetPage() {
     setListing('');
     setDistance('25');
     setState({ kind: 'loading' });
+    setPending(new URLSearchParams());
     setParams(new URLSearchParams());
   }
 
