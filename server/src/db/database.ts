@@ -12,9 +12,14 @@ import type { Database } from './schema.ts';
 pg.types.setTypeParser(20, (v) => Number(v));
 
 export function createDb(url = config.databaseUrl) {
-  return new Kysely<Database>({
-    dialect: new PostgresDialect({ pool: new pg.Pool({ connectionString: url, max: 10 }) }),
+  const ssl = url === config.databaseUrl && config.databaseSsl;
+  const pool = new pg.Pool({
+    // pg reads sslmode from the URL with strict verification; we set TLS explicitly instead.
+    connectionString: ssl ? url.replace(/([?&])sslmode=[^&]*&?/, '$1').replace(/[?&]$/, '') : url,
+    ssl: ssl ? { rejectUnauthorized: process.env.PGSSL_VERIFY === 'true' } : undefined,
+    max: Number(process.env.DB_POOL_MAX ?? 10),
   });
+  return new Kysely<Database>({ dialect: new PostgresDialect({ pool }) });
 }
 
 export type DB = Kysely<Database>;

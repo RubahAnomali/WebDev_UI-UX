@@ -57,7 +57,7 @@ _Updated after Phase 2 (full MVP). It separates **what is built**, **what I reco
 | Item | Why |
 | --- | --- |
 | Legal review of Terms and Privacy; add a cookie notice if required in your region | Required before collecting real user data |
-| Production hosting: HTTPS, managed Postgres with backups, object storage for photos (S3/R2), and a transactional email provider (`SMTP_URL`) | The app currently runs on local disk and a development mailbox |
+| Production hosting: ✅ prepared for Render + Postmark (`render.yaml`, `docs/DEPLOYMENT.md`). Still to do: enable database backups and, later, move photos to object storage (S3/R2) | Photos currently live on the service’s persistent disk |
 | A geocoding service for city/ZIP lookup | Distance search currently relies on coordinates from existing listings or browser location |
 | Monitoring and error tracking (e.g. Sentry) plus uptime alerts | Lets you see problems before users report them |
 | Two-factor authentication for staff accounts | Admins can suspend users and read reported conversations |
@@ -65,7 +65,6 @@ _Updated after Phase 2 (full MVP). It separates **what is built**, **what I reco
 ### Priority 2 — important improvements
 | Item | Why |
 | --- | --- |
-| In-app notification centre (request updates, approvals) | Email alone is easy to miss |
 | Real-time messages (WebSockets/SSE) instead of 10-second polling | Snappier conversations, less server load |
 | Organization profile pages (public shelter pages listing all their pets) | Builds trust and helps shelters |
 | Image moderation and duplicate-photo detection | Catches stolen photos, a common scam signal |
@@ -103,10 +102,10 @@ _Updated after Phase 2 (full MVP). It separates **what is built**, **what I reco
 
 ---
 
-## 5. Decisions needed from you
+## 5. Decisions (resolved)
 
-1. **Hosting:** where to deploy (Render, Fly.io, AWS…) and which email provider to use.
-2. **Fee cap:** currently $750. Adjust if your shelters charge more.
-3. **Active-listing limit for individuals:** currently 3.
-4. **Shelter verification evidence:** what staff should require (registration number, website, references).
-5. **Notification centre (P2):** confirm it's wanted. It needs a small design addition (a bell and a panel).
+1. **Hosting:** Render for the app and database, Postmark for email. See `docs/DEPLOYMENT.md`.
+2. **Fee cap:** kept at $750.
+3. **Active-listing limit for individuals:** kept at 3.
+4. **Shelter verification evidence:** shelters must give a registration or charity number, plus a website/social page or a reference. Staff can't verify a shelter until this is provided.
+5. **Notification centre:** ✅ built. The header has a bell with an unread badge. Notifications cover new requests, request decisions, messages (one per conversation, never including message text), listing moderation, shelter verification and rehoming. On mobile there's a `/notifications` page.

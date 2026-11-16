@@ -1,6 +1,12 @@
 import { buildApp } from './app.ts';
-import { config } from './config.ts';
+import { config, productionConfigProblems } from './config.ts';
 import { createDb, migrateToLatest } from './db/database.ts';
+
+const problems = productionConfigProblems();
+if (problems.length) {
+  console.error(`Pawhaven can't start in production:\n${problems.map((p) => `  • ${p}`).join('\n')}`);
+  process.exit(1);
+}
 
 const db = createDb();
 await migrateToLatest(db);

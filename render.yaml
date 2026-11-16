@@ -1,0 +1,47 @@
+# Render Blueprint for Pawhaven: one web service (API + built client) and a managed Postgres.
+# Create it from the Render dashboard: New → Blueprint → pick this repository.
+# See docs/DEPLOYMENT.md for the full checklist (Postmark email, admin account, custom domain).
+services:
+  - type: web
+    name: pawhaven
+    runtime: node
+    plan: starter # a paid plan is needed for the persistent disk that stores photos
+    region: oregon
+    buildCommand: npm ci --include=dev && npm run build
+    # Migrations run automatically when the server starts.
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    disk:
+      name: pawhaven-uploads
+      mountPath: /var/data
+      sizeGB: 5
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: pawhaven-db
+          property: connectionString
+      - key: UPLOAD_DIR
+        value: /var/data/uploads
+      - key: COOKIE_SECURE
+        value: "true"
+      # Postmark SMTP: smtp://<server-token>:<server-token>@smtp.postmarkapp.com:587
+      - key: SMTP_URL
+        sync: false
+      # e.g. Pawhaven <hello@your-domain.org> — must be on the domain verified in Postmark.
+      - key: MAIL_FROM
+        sync: false
+      # APP_ORIGIN defaults to the Render URL (https://pawhaven.onrender.com).
+      # Set it to https://your-domain.org once a custom domain is attached.
+
+databases:
+  - name: pawhaven-db
+    databaseName: pawhaven
+    user: pawhaven
+    plan: basic-256mb
+    region: oregon
+    postgresMajorVersion: "16"

@@ -66,13 +66,15 @@ The command prints a one-time link for the new admin to set their password. The 
 | Variable | Default | Purpose |
 | --- | --- | --- |
 | `DATABASE_URL` | `postgres://pawhaven:pawhaven@localhost:5432/pawhaven` | PostgreSQL connection |
-| `APP_ORIGIN` | `http://localhost:5173` | Public origin used in email links and the CSRF origin check |
-| `PORT` / `HOST` | `8787` / `127.0.0.1` | API listen address |
+| `APP_ORIGIN` | `http://localhost:5173` (or Render’s `RENDER_EXTERNAL_URL`) | Public origin used in email links and the CSRF origin check |
+| `PORT` / `HOST` | `8787` / `127.0.0.1` (`0.0.0.0` in production) | API listen address |
 | `SMTP_URL` | — | Real email delivery, e.g. `smtps://user:pass@smtp.example.com`. When unset, mail goes to the development mailbox. |
 | `MAIL_FROM` | `Pawhaven <hello@pawhaven.local>` | Sender address |
 | `UPLOAD_DIR` | `server/uploads/` | Where processed photos are stored |
 | `COOKIE_SECURE` | `true` in production | Secure cookies (requires HTTPS) |
 | `RATE_LIMIT` / `AUTH_RATE_LIMIT` | `300`/min, `10`/15 min | Global and sign-in/email request limits per IP |
+| `PGSSLMODE` | — | `require` to connect to Postgres over TLS |
+| `ALLOW_DEV_MAILBOX` | `false` | Production refuses to start without `SMTP_URL` unless this is `true` (staging only) |
 
 ## Architecture
 
@@ -121,11 +123,16 @@ Authorization is enforced **on the server for every request**. The client's rout
 - Phone numbers, emails, links and payment handles are blocked in public listing text.
 - Fees are capped and always labelled.
 - Individuals can have at most 3 active listings. Shelters must be verified before they can submit.
+- Shelters must give a registration or charity number, plus a website or a reference, before staff can verify them.
 
 **Messages**
 - Messages show safety banners and warn about scam phrases like deposits or gift cards.
 - Members can block each other.
-- Message content is never included in notification emails.
+- Message content is never included in notification emails or in-app notifications.
+
+**Notifications**
+- The header bell shows recent updates about requests, decisions, messages, moderation and shelter verification.
+- Message notifications are grouped into one per conversation and are marked read when the conversation is opened.
 
 **Moderation**
 - Listings go live only after review against a checklist.
@@ -170,11 +177,15 @@ Design decisions made with the product owner:
 
 See `docs/PRODUCT_PLAN.md` for the product evaluation and roadmap.
 
+## Deployment
+
+The repository includes a Render Blueprint (`render.yaml`). It sets up one web service and a managed Postgres database, and email goes through Postmark. **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** has the step-by-step checklist.
+
 ## Before launch
 
 - **Legal review:** Terms and Privacy are drafts and must be reviewed by qualified counsel.
 - **Production infrastructure:**
-  - Configure `SMTP_URL`.
+  - Configure `SMTP_URL`. Production refuses to start without it. See `docs/DEPLOYMENT.md`.
   - Move photo storage to object storage. `PhotoStorage` in `server/src/lib/photos.ts` is the adapter seam for this.
   - Run behind HTTPS with `COOKIE_SECURE=true`.
 - **Geocoding:** distance search currently uses coordinates from existing listings in the same city, or the visitor's rounded browser location. A geocoding service would improve accuracy.
