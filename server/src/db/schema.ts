@@ -218,6 +218,18 @@ export interface NotificationPrefsTable {
   discovery: Generated<boolean>;
 }
 
+export interface NotificationsTable {
+  id: Generated<string>;
+  user_id: string;
+  type: string;
+  title: string;
+  body: string | null;
+  link: string | null;
+  conversation_id: string | null;
+  read_at: NullableTimestamp;
+  created_at: Generated<Date>;
+}
+
 export interface DevOutboxTable {
   id: Generated<string>;
   to_email: string;
@@ -246,6 +258,7 @@ export interface Database {
   audit_log: AuditLogTable;
   notification_prefs: NotificationPrefsTable;
   dev_outbox: DevOutboxTable;
+  notifications: NotificationsTable;
 }
 
 export type UserRow = Selectable<UsersTable>;

@@ -17,6 +17,7 @@ import { authRoutes } from './routes/auth.ts';
 import { listingRoutes } from './routes/listings.ts';
 import { meRoutes } from './routes/me.ts';
 import { messageRoutes } from './routes/messages.ts';
+import { notificationRoutes } from './routes/notifications.ts';
 import { myListingRoutes } from './routes/myListings.ts';
 import { reportRoutes } from './routes/reports.ts';
 import { requestRoutes } from './routes/requests.ts';
@@ -93,6 +94,7 @@ export async function buildApp({ db, mailer = createMailer(db), logger = !config
   accountRoutes(app, deps);
   reportRoutes(app, deps);
   adminRoutes(app, deps);
+  notificationRoutes(app, deps);
 
   // Uploaded photos (already re-encoded and EXIF-stripped on upload).
   if (!existsSync(config.uploadDir)) mkdirSync(config.uploadDir, { recursive: true });

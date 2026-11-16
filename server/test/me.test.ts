@@ -19,7 +19,7 @@ describe('/api/me/counts', () => {
 
   it('returns zero counts for a new member', async () => {
     const { client } = await signUp(app);
-    expect((await client.get('/api/me/counts')).json()).toEqual({ unreadConversations: 0, newRequests: 0 });
+    expect((await client.get('/api/me/counts')).json()).toEqual({ unreadConversations: 0, newRequests: 0, unreadNotifications: 0 });
   });
 });
 

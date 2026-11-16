@@ -15,6 +15,7 @@ import { requireUser } from '../auth/session.ts';
 import type { DB } from '../db/database.ts';
 import type { ListingRow } from '../db/schema.ts';
 import { audit } from '../lib/audit.ts';
+import { notify } from '../lib/notify.ts';
 import { ApiError } from '../lib/errors.ts';
 import { localStorage, processPhoto } from '../lib/photos.ts';
 import { parse } from '../lib/validate.ts';
@@ -292,8 +293,16 @@ export function myListingRoutes(app: FastifyInstance, { db }: { db: DB }) {
           .set({ status: 'declined', updated_at: new Date() })
           .where('listing_id', '=', row.id)
           .where('status', 'in', ['sent', 'in_review', 'meet_invited'])
-          .returning('id')
+          .returning(['id', 'applicant_id'])
           .execute();
+        for (const r of open) {
+          await notify(db, r.applicant_id, {
+            type: 'request_closed',
+            title: `${row.name} has found a home`,
+            body: 'Your request was closed. There are more companions waiting for a loving home.',
+            link: `/requests/${r.id}`,
+          });
+        }
         if (open.length) {
           await db
             .insertInto('request_events')

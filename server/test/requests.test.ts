@@ -37,7 +37,7 @@ describe('sending a request', () => {
     const row = await testDb.selectFrom('adoption_requests').select('email').executeTakeFirstOrThrow();
     expect(row.email).toBe(adopter.email); // never the spoofed address
     expect((await latestEmail(seller.email, 'adoption request'))?.subject).toMatch(/New adoption request for Finn/);
-    expect((await seller.client.get('/api/me/counts')).json()).toEqual({ unreadConversations: 1, newRequests: 1 });
+    expect((await seller.client.get('/api/me/counts')).json()).toEqual({ unreadConversations: 1, newRequests: 1, unreadNotifications: 1 });
     expect((await adopter.client.get(`/api/listings/${listingId}`)).json().listing.viewer.requestId).toBe(request.id);
   });
 

@@ -7,6 +7,7 @@ import { config } from '../config.ts';
 import type { DB } from '../db/database.ts';
 import { ApiError, notFound } from '../lib/errors.ts';
 import type { Mailer } from '../lib/mailer.ts';
+import { markConversationNotificationsRead, notify } from '../lib/notify.ts';
 import { parse } from '../lib/validate.ts';
 
 const UUID = /^[0-9a-f-]{36}$/i;
@@ -117,6 +118,13 @@ export function messageRoutes(app: FastifyInstance, { db, mailer }: { db: DB; ma
       .where('conversation_id', '=', conversationId)
       .where('user_id', '=', senderId)
       .execute();
+
+    await notify(db, other.id, {
+      type: 'message',
+      title: `New message about ${convo.listing_name}`,
+      link: `/messages/${conversationId}`,
+      conversationId,
+    });
 
     if ((unread?.n ?? 0) === 0) {
       const prefs = await db.selectFrom('notification_prefs').select('messages').where('user_id', '=', other.id).executeTakeFirst();
@@ -243,6 +251,7 @@ export function messageRoutes(app: FastifyInstance, { db, mailer }: { db: DB; ma
       .where('conversation_id', '=', req.params.id)
       .where('user_id', '=', user.id)
       .execute();
+    await markConversationNotificationsRead(db, user.id, req.params.id);
     const blockedByMe = other
       ? Boolean(await db.selectFrom('blocks').select('blocker_id').where('blocker_id', '=', user.id).where('blocked_id', '=', other.id).executeTakeFirst())
       : false;

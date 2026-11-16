@@ -7,6 +7,7 @@ import { Button } from '../ui/Button';
 import { Icon } from '../ui/Icon';
 import { Logo } from '../ui/Logo';
 import { AccountMenu } from './AccountMenu';
+import { NotificationBell } from './NotificationBell';
 import styles from './SiteHeader.module.css';
 
 interface NavItem {
@@ -78,10 +79,10 @@ export function SiteHeader() {
 
   const firstName = user?.fullName.split(' ')[0];
   const loginHref = `${ROUTES.login}?next=${encodeURIComponent(location.pathname + location.search)}`;
-  const totalBadge = counts.unreadConversations + counts.newRequests;
+  const totalBadge = counts.unreadConversations + counts.newRequests + counts.unreadNotifications;
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${user ? styles.userHeader : ''}`}>
       <div className={`container ${styles.inner}`}>
         <Logo />
 
@@ -110,6 +111,7 @@ export function SiteHeader() {
               <Button to={ROUTES.postPet} className={styles.post} iconStart={<Icon name="plus" size={18} strokeWidth={2} />}>
                 Post a pet
               </Button>
+              <NotificationBell unread={counts.unreadNotifications} />
               <AccountMenu user={user} newRequests={counts.newRequests} onLogout={handleLogout} />
             </>
           ) : (
@@ -156,6 +158,12 @@ export function SiteHeader() {
             ))}
             {user ? (
               <>
+                <li>
+                  <Link to={ROUTES.notifications} className={styles.mobileLink}>
+                    Notifications
+                    <NavBadge count={counts.unreadNotifications} label="unread notifications" />
+                  </Link>
+                </li>
                 <li>
                   <Link to={ROUTES.requests} className={styles.mobileLink}>
                     My adoption requests

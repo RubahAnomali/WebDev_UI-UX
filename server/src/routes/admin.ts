@@ -10,6 +10,7 @@ import type { DB } from '../db/database.ts';
 import { audit } from '../lib/audit.ts';
 import { ApiError, notFound } from '../lib/errors.ts';
 import type { Mailer } from '../lib/mailer.ts';
+import { notify } from '../lib/notify.ts';
 import { parse } from '../lib/validate.ts';
 import { photoRef } from '../listings/repo.ts';
 
@@ -223,6 +224,12 @@ export function adminRoutes(app: FastifyInstance, { db, mailer }: { db: DB; mail
       request_changes: { subject: `A few details need your care: ${l.name}`, body: `Our moderators asked for changes before ${l.name}’s listing can go live: ${input.reason}` },
       reject: { subject: `${l.name}’s listing wasn’t approved`, body: `${l.name}’s listing wasn’t approved: ${input.reason}` },
     }[input.decision];
+    await notify(db, l.owner_id, {
+      type: input.decision === 'approve' ? 'listing_approve' : input.decision === 'reject' ? 'listing_reject' : 'listing_request_changes',
+      title: mail.subject,
+      body: input.decision === 'approve' ? 'It’s now visible to adopters.' : input.reason ?? null,
+      link: input.decision === 'request_changes' ? `/post-a-pet/${l.id}` : '/my-listings',
+    });
     await mailer.send({ to: l.email, ...mail, link: `${config.appOrigin}/my-listings` });
     return { status };
   });
@@ -402,6 +409,12 @@ export function adminRoutes(app: FastifyInstance, { db, mailer }: { db: DB; mail
       if (status === 'verified' && !m.roles.includes('seller')) {
         await db.updateTable('users').set({ roles: [...m.roles, 'seller'] }).where('id', '=', m.id).execute();
       }
+      await notify(db, m.id, {
+        type: status === 'verified' ? 'organization_verify' : 'organization_reject',
+        title: status === 'verified' ? `${org.name} is verified` : `We couldn’t verify ${org.name}`,
+        body: status === 'verified' ? 'You can now submit listings for review.' : input.note || null,
+        link: status === 'verified' ? '/my-listings' : '/account',
+      });
       await mailer.send({
         to: m.email,
         subject: status === 'verified' ? `${org.name} is verified on Pawhaven` : `About ${org.name}’s verification`,

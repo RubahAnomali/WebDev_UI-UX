@@ -22,6 +22,7 @@ export const ROUTES = {
   messages: '/messages',
   requests: '/requests',
   account: '/account',
+  notifications: '/notifications',
   admin: '/admin',
 } as const;
 

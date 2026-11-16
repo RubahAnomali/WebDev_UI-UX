@@ -10,6 +10,7 @@ import type { RequestRow } from '../db/schema.ts';
 import { audit } from '../lib/audit.ts';
 import { ApiError, notFound } from '../lib/errors.ts';
 import type { Mailer } from '../lib/mailer.ts';
+import { notify } from '../lib/notify.ts';
 import { parse } from '../lib/validate.ts';
 import { loadOwnListing } from '../listings/owner.ts';
 
@@ -184,6 +185,12 @@ export function requestRoutes(app: FastifyInstance, { db, mailer }: { db: DB; ma
     });
 
     const owner = await db.selectFrom('users').select(['email', 'id']).where('id', '=', listing.owner_id).executeTakeFirstOrThrow();
+    await notify(db, owner.id, {
+      type: 'request_new',
+      title: `New adoption request for ${listing.name}`,
+      body: `From ${input.fullName.split(' ')[0]}.`,
+      link: `/my-listings/${listing.id}/requests`,
+    });
     if (await wantsEmail(db, owner.id)) {
       await mailer.send({
         to: owner.email,
@@ -301,6 +308,16 @@ export function requestRoutes(app: FastifyInstance, { db, mailer }: { db: DB; ma
       await db.insertInto('request_events').values({ request_id: r.id, status, actor_id: user.id, note: note || null }).execute();
       await audit(db, req, { action: `request.${action}`, entityType: 'adoption_request', entityId: r.id });
 
+      await notify(db, r.applicant_id, {
+        type: `request_${action}`,
+        title: {
+          invite: `You’re invited to meet ${r.listing_name}`,
+          approve: `Your request for ${r.listing_name} was approved`,
+          decline: `An update on your request for ${r.listing_name}`,
+        }[action],
+        body: note || null,
+        link: `/requests/${r.id}`,
+      });
       if (await wantsEmail(db, r.applicant_id)) {
         const subject = {
           invite: `You’re invited to meet ${r.listing_name}`,

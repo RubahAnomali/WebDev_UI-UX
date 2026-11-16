@@ -23,6 +23,12 @@ export function meRoutes(app: FastifyInstance, { db }: { db: DB }) {
       .where('r.seller_unread', '=', true)
       .where('r.status', 'in', ['sent', 'in_review'])
       .executeTakeFirst();
-    return { unreadConversations: unread?.n ?? 0, newRequests: requests?.n ?? 0 };
+    const notifications = await db
+      .selectFrom('notifications')
+      .select(sql<number>`count(*)::int`.as('n'))
+      .where('user_id', '=', user.id)
+      .where('read_at', 'is', null)
+      .executeTakeFirst();
+    return { unreadConversations: unread?.n ?? 0, newRequests: requests?.n ?? 0, unreadNotifications: notifications?.n ?? 0 };
   });
 }

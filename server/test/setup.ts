@@ -7,7 +7,7 @@ export const testDb = createDb();
 beforeEach(async () => {
   await sql`TRUNCATE users, organizations, sessions, auth_tokens, listings, listing_photos, favorites,
     adoption_requests, request_events, conversations, conversation_participants, messages, blocks,
-    reports, moderation_actions, audit_log, notification_prefs, dev_outbox RESTART IDENTITY CASCADE`.execute(testDb);
+    reports, moderation_actions, audit_log, notification_prefs, dev_outbox, notifications RESTART IDENTITY CASCADE`.execute(testDb);
 });
 
 afterAll(async () => {

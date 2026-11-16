@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { RequireAuth } from './components/layout/RequireAuth';
 import { AccountPage } from './features/account/AccountPage';
+import { NotificationsPage } from './features/notifications/NotificationsPage';
 import { ConfirmEmailPage } from './features/account/ConfirmEmailPage';
 import { AdminAuditPage, AdminMembersPage, AdminOrganizationsPage, AdminReportsPage } from './features/admin/AdminPages';
 import { ReviewQueuePage } from './features/admin/ReviewQueuePage';
@@ -80,6 +81,7 @@ export function App() {
         <Route path={ROUTES.messages} element={member(<MessagesPage />)} />
         <Route path={`${ROUTES.messages}/:conversationId`} element={member(<MessagesPage />)} />
         <Route path={ROUTES.account} element={member(<AccountPage />)} />
+        <Route path={ROUTES.notifications} element={member(<NotificationsPage />)} />
 
         {/* Listing owners */}
         <Route path={ROUTES.postPet} element={member(<PostPetPage />)} />

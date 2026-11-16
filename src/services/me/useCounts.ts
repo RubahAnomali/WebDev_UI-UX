@@ -5,9 +5,10 @@ import { useAuth } from '../auth/AuthContext';
 export interface Counts {
   unreadConversations: number;
   newRequests: number;
+  unreadNotifications: number;
 }
 
-const EMPTY: Counts = { unreadConversations: 0, newRequests: 0 };
+const EMPTY: Counts = { unreadConversations: 0, newRequests: 0, unreadNotifications: 0 };
 const listeners = new Set<() => void>();
 
 /** Ask every mounted header badge to refresh (e.g. after reading a conversation). */
