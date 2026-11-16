@@ -151,3 +151,10 @@ export async function liveListingFor(app: FastifyInstance, overrides: Record<str
   await testDb.updateTable('listings').set({ status: 'live', published_at: new Date() }).where('id', '=', id).execute();
   return { seller, listingId: id };
 }
+
+/** Creates a signed-in admin (as the CLI would) for tests. */
+export async function adminClient(app: FastifyInstance) {
+  const ctx = await signUp(app, { fullName: 'Sam Staff' });
+  await grantRole(ctx.userId, 'admin');
+  return ctx;
+}

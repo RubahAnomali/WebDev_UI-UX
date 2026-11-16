@@ -1,0 +1,153 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(253, 252, 248, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+.inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  height: var(--header-height);
+}
+
+.inner::after {
+  content: '';
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 0;
+  height: 1px;
+  background: var(--color-divider);
+}
+
+.nav {
+  flex: 1;
+  min-width: 0;
+  padding-left: clamp(8px, 7vw, 110px);
+  overflow-x: auto;
+}
+
+.nav ul {
+  display: flex;
+  gap: 4px;
+}
+
+.link {
+  display: block;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 15px;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.link:hover {
+  background: var(--color-soft-green-2);
+}
+
+.active {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.staff {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+.back {
+  min-width: 198px;
+}
+
+.main {
+  padding-top: 47px;
+}
+
+.main:focus-visible {
+  outline: none;
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(32px, 3.2vw, 42px);
+  line-height: 1.19;
+  color: var(--color-ink);
+}
+
+.subtitle {
+  margin-top: 17px;
+  font-size: 15px;
+  color: var(--color-muted);
+}
+
+.badge {
+  flex: none;
+  margin-top: 8px;
+  padding: 6px 10px;
+  min-width: 168px;
+  border-radius: var(--radius-pill);
+  background: var(--color-peach-2);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.note {
+  margin-top: 56px;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+@media (max-width: 1100px) {
+  .staff {
+    display: none;
+  }
+  .back {
+    min-width: 0;
+  }
+  .nav {
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .inner {
+    flex-wrap: wrap;
+    height: auto;
+    padding-top: 12px;
+    padding-bottom: 8px;
+    gap: 8px 16px;
+  }
+  .right {
+    margin-left: auto;
+  }
+  .nav {
+    order: 3;
+    flex-basis: 100%;
+  }
+  .head {
+    flex-direction: column;
+  }
+}

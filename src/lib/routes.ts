@@ -34,14 +34,3 @@ export const reportPath = (type: 'listing' | 'user' | 'conversation', id: string
   `/safety?report=${type}&id=${encodeURIComponent(id)}#report`;
 export const editListingPath = (id: string) => `/post-a-pet/${id}`;
 export const listingRequestsPath = (id: string) => `/my-listings/${id}/requests`;
-
-/**
- * Destinations that belong to later phases. They render an honest
- * "coming soon" page instead of a fake implementation.
- */
-export const UPCOMING_PAGES: Record<string, { title: string; summary: string }> = {};
-
-/** Signed-in destinations still being built; guarded so they require an account. */
-export const UPCOMING_PRIVATE_PAGES: Record<string, { title: string; summary: string; role?: 'admin' }> = {
-  [ROUTES.admin]: { title: 'Moderation workspace', summary: 'Care behind every connection.', role: 'admin' },
-};

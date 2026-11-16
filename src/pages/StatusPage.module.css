@@ -45,3 +45,36 @@
   gap: 12px;
   margin-top: 32px;
 }
+
+/* Plain buttons for the error boundary, which renders outside the router. */
+.button,
+.buttonSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 24px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.button {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.button:hover {
+  background: var(--color-primary-hover);
+}
+
+.buttonSecondary {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+
+.buttonSecondary:hover {
+  background: var(--color-soft-green-2);
+}
