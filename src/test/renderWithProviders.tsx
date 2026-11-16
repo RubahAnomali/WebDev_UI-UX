@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { createDemoAuthAdapter } from '../services/auth/demoAuthAdapter';
 import { AuthProvider } from '../services/auth/AuthContext';
+import { SavedPetsProvider } from '../services/pets/SavedPetsContext';
 import type { AuthService } from '../services/auth/types';
 
 export function renderWithProviders(
@@ -13,7 +14,9 @@ export function renderWithProviders(
     service,
     ...render(
       <MemoryRouter initialEntries={[route]}>
-        <AuthProvider service={service}>{ui}</AuthProvider>
+        <AuthProvider service={service}>
+          <SavedPetsProvider>{ui}</SavedPetsProvider>
+        </AuthProvider>
       </MemoryRouter>,
     ),
   };

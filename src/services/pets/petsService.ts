@@ -1,60 +1,34 @@
-import { readJSON, writeJSON } from '../../lib/storage';
-import { SAMPLE_FEATURED_PETS } from './sampleData';
-import type { PetSummary } from './types';
+import { http } from '../api/client';
+import type { PetDetail, PetSummary, SearchResult } from './types';
 
 export interface PetsService {
-  /** True while listings come from bundled sample data. */
-  readonly isSample: boolean;
   getFeatured(signal?: AbortSignal): Promise<PetSummary[]>;
+  search(params: URLSearchParams, signal?: AbortSignal): Promise<SearchResult>;
+  get(id: string, signal?: AbortSignal): Promise<PetDetail>;
+  listSaved(signal?: AbortSignal): Promise<PetSummary[]>;
+  savedIds(): Promise<string[]>;
+  setSaved(id: string, saved: boolean): Promise<boolean>;
 }
 
-type DemoState = 'ok' | 'empty' | 'error' | 'slow';
+export const petsService: PetsService = {
+  getFeatured: (signal) => http.get<{ items: PetSummary[] }>('/api/listings/featured', signal).then((r) => r.items),
+  search: (params, signal) => http.get<SearchResult>(`/api/listings?${params.toString()}`, signal),
+  get: (id, signal) =>
+    http.get<{ listing: PetDetail }>(`/api/listings/${encodeURIComponent(id)}`, signal).then((r) => r.listing),
+  listSaved: (signal) => http.get<{ items: PetSummary[] }>('/api/favorites', signal).then((r) => r.items),
+  savedIds: () => http.get<{ ids: string[] }>('/api/favorites/ids').then((r) => r.ids),
+  setSaved: (id, saved) =>
+    (saved
+      ? http.put<{ saved: boolean }>(`/api/favorites/${id}`)
+      : http.del<{ saved: boolean }>(`/api/favorites/${id}`)
+    ).then((r) => r.saved),
+};
 
-/**
- * In development you can preview the section's states with
- * `/?demoState=empty|error|slow`.
- */
-function demoState(): DemoState {
-  if (!import.meta.env.DEV) return 'ok';
-  const v = new URLSearchParams(window.location.search).get('demoState');
-  return v === 'empty' || v === 'error' || v === 'slow' ? v : 'ok';
+/** Formats a fee for display, labelled per the approved design decision. */
+export function feeLabel(fee: number | null | undefined, listingType: string | null | undefined) {
+  const kind = listingType === 'rehoming' ? 'Rehoming fee' : 'Adoption fee';
+  if (!fee) return { kind, amount: 'No fee', full: `${kind}: none` };
+  return { kind, amount: `$${fee}`, full: `${kind} $${fee}` };
 }
 
-export function createSamplePetsService(latency = 500): PetsService {
-  return {
-    isSample: true,
-    getFeatured(signal) {
-      const state = demoState();
-      const delay = state === 'slow' ? 4000 : latency;
-      return new Promise((resolve, reject) => {
-        const t = setTimeout(() => {
-          if (state === 'error') reject(new Error('Unable to load companions right now.'));
-          else resolve(state === 'empty' ? [] : SAMPLE_FEATURED_PETS);
-        }, delay);
-        signal?.addEventListener('abort', () => {
-          clearTimeout(t);
-          reject(new DOMException('Aborted', 'AbortError'));
-        });
-      });
-    },
-  };
-}
-
-export const petsService = createSamplePetsService();
-
-/* ---------- Saved pets (per user, local until the favorites API exists) ---------- */
-
-const savedKey = (userId: string) => `pawhaven.demo.saved.${userId}`;
-
-export function getSavedPetIds(userId: string): string[] {
-  return readJSON<string[]>(savedKey(userId), []);
-}
-
-export function toggleSavedPet(userId: string, petId: string): boolean {
-  const current = new Set(getSavedPetIds(userId));
-  const saved = !current.has(petId);
-  if (saved) current.add(petId);
-  else current.delete(petId);
-  writeJSON(savedKey(userId), [...current]);
-  return saved;
-}
+export const SEX_LABEL: Record<string, string> = { female: 'Female', male: 'Male', unknown: 'Sex unknown' };

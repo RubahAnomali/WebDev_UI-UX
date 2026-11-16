@@ -12,6 +12,7 @@ import type { DB } from './db/database.ts';
 import { ApiError } from './lib/errors.ts';
 import { createMailer, type Mailer } from './lib/mailer.ts';
 import { authRoutes } from './routes/auth.ts';
+import { listingRoutes } from './routes/listings.ts';
 import { meRoutes } from './routes/me.ts';
 import { systemRoutes } from './routes/system.ts';
 
@@ -79,6 +80,7 @@ export async function buildApp({ db, mailer = createMailer(db), logger = !config
   systemRoutes(app, deps);
   authRoutes(app, deps);
   meRoutes(app, deps);
+  listingRoutes(app, deps);
 
   // Uploaded photos (already re-encoded and EXIF-stripped on upload).
   if (!existsSync(config.uploadDir)) mkdirSync(config.uploadDir, { recursive: true });
@@ -91,7 +93,7 @@ export async function buildApp({ db, mailer = createMailer(db), logger = !config
   });
 
   if (config.serveClient && existsSync(config.clientDist)) {
-    await app.register(fastifyStatic, { root: config.clientDist, prefix: '/', wildcard: false });
+    await app.register(fastifyStatic, { root: config.clientDist, prefix: '/', decorateReply: true });
     app.setNotFoundHandler((req, reply) => {
       if (req.url.startsWith('/api/') || req.url.startsWith('/uploads/')) {
         return reply.status(404).send({ error: { code: 'NOT_FOUND', message: 'Not found.' } });

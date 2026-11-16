@@ -28,10 +28,107 @@
   background: var(--color-soft-green);
 }
 
-.art {
+.art,
+.photo {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.media {
+  overflow: hidden;
+}
+
+.tone_green {
+  background: #e6ecdf;
+}
+.tone_peach {
+  background: #f5e8da;
+}
+.tone_lilac {
+  background: #ede8f0;
+}
+.tone_sage {
+  background: #e9ede3;
+}
+
+.browse {
+  border-color: var(--color-border);
+  border-radius: 16px;
+}
+
+.browse .media {
+  aspect-ratio: 318 / 190;
+}
+
+.browse .name {
+  font-size: 22px;
+  line-height: 33px;
+}
+
+.browse .body {
+  padding: 16px 18px 14px;
+}
+
+.browse .footer {
+  padding-top: 13px;
+}
+
+.unavailable {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(32, 63, 53, 0.86);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.feeKind {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 14px;
+  color: var(--color-muted);
+  text-align: right;
+}
+
+.feeAmount {
+  display: block;
+  text-align: right;
+}
+
+.verified {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 6px;
+  vertical-align: -3px;
+  border-radius: 50%;
+  background: var(--color-soft-green);
+  color: var(--color-primary);
+}
+
+.meet {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.card:hover .meet svg {
+  transform: translateX(3px);
+}
+
+.meet svg {
+  transition: transform var(--duration) var(--ease);
 }
 
 .badge {
@@ -96,12 +193,14 @@
 
 .titleRow {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
 .name {
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-size: 24px;
   font-weight: 600;
   line-height: 36px;
@@ -120,9 +219,10 @@
 }
 
 .fee {
-  font-size: 17px;
+  flex: none;
+  font-size: 16px;
   font-weight: 600;
-  line-height: 26px;
+  line-height: 22px;
   color: var(--color-ink);
 }
 

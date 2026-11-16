@@ -5,6 +5,9 @@ import { RegisterPage } from './features/auth/RegisterPage';
 import { ResetPasswordPage } from './features/auth/ResetPasswordPage';
 import { VerifyEmailPage } from './features/auth/VerifyEmailPage';
 import { HomePage } from './features/home/HomePage';
+import { FindPetPage } from './features/pets/FindPetPage';
+import { PetProfilePage } from './features/pets/PetProfilePage';
+import { SavedPetsPage } from './features/pets/SavedPetsPage';
 import { RequireAuth } from './components/layout/RequireAuth';
 import { ROUTES, UPCOMING_PAGES, UPCOMING_PRIVATE_PAGES } from './lib/routes';
 import { ScrollManager } from './lib/ScrollManager';
@@ -30,9 +33,15 @@ export function App() {
         {Object.keys(UPCOMING_PAGES).map((path) => (
           <Route key={path} path={path} element={<ComingSoon />} />
         ))}
+        <Route path={ROUTES.findPet} element={<FindPetPage />} />
+        <Route path={`${ROUTES.findPet}/:petId`} element={<PetProfilePage />} />
         <Route
-          path={`${ROUTES.findPet}/:petId`}
-          element={<ComingSoon title="Pet profile" summary="Full profiles with health, care needs, and how to apply." />}
+          path={ROUTES.saved}
+          element={
+            <RequireAuth>
+              <SavedPetsPage />
+            </RequireAuth>
+          }
         />
 
         {Object.entries(UPCOMING_PRIVATE_PAGES).map(([path, page]) => (

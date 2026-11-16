@@ -6,6 +6,7 @@ import '@fontsource/lora/400.css';
 import './styles/global.css';
 import { App } from './App';
 import { AuthProvider } from './services/auth/AuthContext';
+import { SavedPetsProvider } from './services/pets/SavedPetsContext';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Root element #root not found');
@@ -14,7 +15,9 @@ createRoot(root).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <SavedPetsProvider>
+          <App />
+        </SavedPetsProvider>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>,

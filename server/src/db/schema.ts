@@ -64,6 +64,7 @@ export interface ListingsTable {
   organization_id: string | null;
   status: Generated<'draft' | 'pending' | 'changes_requested' | 'live' | 'paused' | 'rehomed' | 'rejected'>;
   name: string;
+  headline: string | null;
   species: string | null;
   breed: string | null;
   sex: string | null;

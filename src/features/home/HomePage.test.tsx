@@ -1,7 +1,16 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Route, Routes, useLocation } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { pet } from '../../test/fixtures';
+
+vi.mock('../../services/pets/petsService', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../services/pets/petsService')>();
+  return {
+    ...actual,
+    petsService: { ...actual.petsService, getFeatured: () => Promise.resolve([pet()]) },
+  };
+});
 import { renderWithProviders } from '../../test/renderWithProviders';
 import { HomePage } from './HomePage';
 
@@ -33,8 +42,9 @@ describe('HomePage', () => {
     expect(screen.getByRole('heading', { name: /good homes\. thoughtful connections/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /their person is out there/i })).toBeInTheDocument();
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
-    expect(screen.getByText(/sample listings for demonstration/i)).toBeInTheDocument();
     expect(await screen.findByRole('heading', { name: 'Luna' }, { timeout: 2000 })).toBeInTheDocument();
+    expect(screen.getByText(/sample listings for demonstration/i)).toBeInTheDocument();
+    expect(screen.getByText('Adoption fee')).toBeInTheDocument();
   });
 
   it('search submits filters to the Find a pet route', async () => {
