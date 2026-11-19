@@ -118,7 +118,7 @@
   margin-top: 18px;
   font-size: 13px;
   line-height: 20px;
-  text-align: right;
+  text-align: center;
   color: var(--color-muted);
 }
 
@@ -148,6 +148,9 @@
     left: 16px;
     top: auto;
     bottom: 36px;
+  }
+  .caption {
+    text-align: right;
   }
 }
 
