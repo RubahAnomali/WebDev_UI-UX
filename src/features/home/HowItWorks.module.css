@@ -1,5 +1,5 @@
 .section {
-  padding: 43px 0 46px;
+  padding: 43px 0 90px;
   background: var(--color-soft-green-3);
 }
 
@@ -64,6 +64,9 @@
 }
 
 @media (max-width: 860px) {
+  .section {
+    padding-bottom: 46px;
+  }
   .steps {
     grid-template-columns: 1fr;
     gap: 32px;
